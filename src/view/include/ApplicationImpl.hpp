@@ -1,5 +1,7 @@
 #pragma once
 #include "view/Application.hpp"
+#include <gtkmm/application.h>
+#include "MainWindow.hpp"
 
 namespace view
 {
@@ -9,5 +11,9 @@ public:
     ApplicationImpl(int, char**);
     ~ApplicationImpl() override = default;
     int run() override;
+
+public:
+    Glib::RefPtr<Gtk::Application> app;
+    MainWindow window;
 };
 } // namespace view
