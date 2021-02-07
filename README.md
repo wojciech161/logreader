@@ -1,1 +1,2 @@
 # logreader
+For fun project
