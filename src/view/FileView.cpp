@@ -100,10 +100,6 @@ void FileView::closeTab(const std::string& path)
     views.erase(path);
     labels.erase(path);
     paths.erase(std::remove(paths.begin(), paths.end(), path));
-    if (get_n_pages () == 0)
-    {
-        return bookmarkView.clear();
-    }
 }
 
 void FileView::onPageChanged(Gtk::Widget*, guint page) try

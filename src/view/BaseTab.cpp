@@ -13,16 +13,19 @@ BaseTab::BaseTab(const functions::BufferCreator& bufferCreator, BookmarkView& bo
 : bookmarkView{bookmarkView}
 , name{bufferCreator.getName()}
 , baseLog{bufferCreator}
+, bookmarks{bookmarkView.getColumns()}
 {
     set_border_width(10);
     append_page(baseLog, "Base");
     show_all_children();
-    signal_switch_page().connect(sigc::mem_fun(*this, &BaseTab::onPageChanged));
+    pageChangedConnection = 
+        signal_switch_page().connect(sigc::mem_fun(*this, &BaseTab::onPageChanged));
 }
 
 BaseTab::~BaseTab()
 {
     std::cout << "~BaseTab: " << name << std::endl;
+    pageChangedConnection.disconnect();
     bookmarkView.release(this);
 }
 
@@ -76,6 +79,15 @@ std::string BaseTab::getSelectedText() const try
     return "";
 }
 
+void BaseTab::onBookmarkActivated(const Gtk::TreeModel::Path& path)
+{
+    int line = bookmarks.getBookmarkLine(path);
+    if (line > 0)
+    {
+        goToLine(line);
+    }
+}
+
 BaseTab& BaseTab::getCurrentTab() // may throw (expected behavior)!!!
 {
     if (0 == get_current_page())
@@ -120,14 +132,8 @@ void BaseTab::closeTab(const std::string& tabName)
 
 void BaseTab::newBookmark(const std::string& bookmarkName)
 {
-    if (std::find_if(bookmarks.begin(), bookmarks.end(), [bookmarkName](const auto& b) {return b.name == bookmarkName;}) != bookmarks.end())
-    {
-        std::cout << "Bookmark " << bookmarkName << " already exists\n";
-        return;
-    }
     std::cout << "Add bookmark: " << bookmarkName << ", line: " << baseLog.getCurrentLine() << " for: " << name << std::endl;
-    bookmarks.insert({baseLog.getCurrentLine(), bookmarkName});
-    updateBookmarksView();
+    bookmarks.add(baseLog.getCurrentLine(), bookmarkName);
 }
 
 void BaseTab::onPageChanged(Gtk::Widget*, guint) try
@@ -149,7 +155,7 @@ void BaseTab::updateBookmarks() try
 void BaseTab::updateBookmarksView()
 {
     std::cout << "Update bookmarks view: " << name << std::endl;
-    bookmarkView.update(this, bookmarks);
+    bookmarkView.update(this, bookmarks.getModel());
 }
 
 void BaseTab::goToLine(int lineNum)

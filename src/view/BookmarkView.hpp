@@ -15,29 +15,20 @@ namespace view
 {
 class BookmarkView : public Gtk::ScrolledWindow
 {
-    class BookmarkColumns : public Gtk::TreeModel::ColumnRecord
-    {
-    public:
-        BookmarkColumns() { add(lineNumber); add(bookmarkName);}
-
-        Gtk::TreeModelColumn<unsigned int> lineNumber;
-        Gtk::TreeModelColumn<Glib::ustring> bookmarkName;
-    };
 public:
     BookmarkView();
     virtual ~BookmarkView() = default;
 
-    void update(BaseTab*, const model::BookmarkList&);
+    const model::BookmarkColumns& getColumns() const;
+    void update(BaseTab*, const Glib::RefPtr<Gtk::ListStore>&);
     void release(BaseTab*);
-    void clear();
 
 private:
     void onColumnActivated(const Gtk::TreeModel::Path&, Gtk::TreeViewColumn*);
 
 private:
-    BookmarkColumns columns;
+    model::BookmarkColumns columns;
     Gtk::TreeView treeView;
-    Glib::RefPtr<Gtk::ListStore> refTreeModel;
     BaseTab* currentTab;
 };
 } // namespace view

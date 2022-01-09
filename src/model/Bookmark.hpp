@@ -1,16 +1,29 @@
 #pragma once
 
-#include <set>
-#include <string>
+#include <gtkmm/liststore.h>
+#include <gtkmm/treemodel.h>
 
 namespace model
 {
-struct Bookmark
+struct BookmarkColumns : public Gtk::TreeModel::ColumnRecord
 {
-    int lineNumber;
-    std::string name;
+    BookmarkColumns();
+    Gtk::TreeModelColumn<unsigned int> lineNumber;
+    Gtk::TreeModelColumn<Glib::ustring> bookmarkName;
 };
 
-bool operator<(const Bookmark&, const Bookmark&);
-using BookmarkList = std::set<Bookmark>;
+class BookmarkList
+{
+public:
+    BookmarkList(const BookmarkColumns&);
+    ~BookmarkList();
+
+    void add(int, const std::string&);
+    int getBookmarkLine(const Gtk::TreeModel::Path&);
+    const Glib::RefPtr<Gtk::ListStore>& getModel() const;
+
+private:
+    const BookmarkColumns& columns;
+    Glib::RefPtr<Gtk::ListStore> bookmarks;
+};
 } // namespace model

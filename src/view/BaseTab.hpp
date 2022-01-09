@@ -35,6 +35,7 @@ public:
     void findNext(functions::Find&);
     void markWords(functions::Mark&);
     std::string getSelectedText() const;
+    void onBookmarkActivated(const Gtk::TreeModel::Path&);
 
 private:
     BaseTab& getCurrentTab();
@@ -56,5 +57,6 @@ private:
     std::map<std::string, std::unique_ptr<BaseTab>> grepTabs;
     std::vector<std::string> grepNames;
     model::BookmarkList bookmarks;
+    sigc::connection pageChangedConnection;
 };
 } // namespaceview 
