@@ -23,7 +23,8 @@ add_executable(
     functions/Match.cpp
     functions/Open.cpp
 
-    model/Bookmark.cpp
+    model/BookmarkColumns.cpp
+    model/BookmarkList.cpp
 
     view/AboutDialog.cpp
     view/BaseTab.cpp

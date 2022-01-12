@@ -21,7 +21,6 @@ void FileView::addFile(const std::string& path) try
     {
         functions::Open fileOpener{path};
         {
-            std::lock_guard lock{mtx};
             labels.emplace(std::make_pair(path, std::make_unique<TabLabel>(fileOpener.getName(), [this, path](){closeTab(path);})));
             views.emplace(std::make_pair(path, std::make_unique<BaseTab>(fileOpener, bookmarkView)));
             paths.push_back(path);
@@ -40,7 +39,6 @@ void FileView::addFile(const std::string& path) try
 
 void FileView::addGrep(functions::Grep& grep) try
 {
-    std::lock_guard lock{mtx};
     views.at(paths.at(get_current_page()))->addGrep(grep);
 } catch(const std::exception& e)
 {
@@ -49,7 +47,6 @@ void FileView::addGrep(functions::Grep& grep) try
 
 void FileView::addBookmark(const std::string& name) try
 {
-    std::lock_guard lock{mtx};
     views.at(paths.at(get_current_page()))->addBookmark(name);
 } catch(const std::exception& e)
 {
@@ -58,7 +55,6 @@ void FileView::addBookmark(const std::string& name) try
 
 void FileView::addMark(const std::string& word) try
 {
-    std::lock_guard lock{mtx};
     views.at(paths.at(get_current_page()))->addMark(word);
 } catch(const std::exception& e)
 {
@@ -67,7 +63,6 @@ void FileView::addMark(const std::string& word) try
 
 void FileView::findNext(functions::Find& operation) try
 {
-    std::lock_guard lock{mtx};
     views.at(paths.at(get_current_page()))->findNext(operation);
 } catch(const std::exception& e)
 {
@@ -76,7 +71,6 @@ void FileView::findNext(functions::Find& operation) try
 
 void FileView::markWords(functions::Mark& operation) try
 {
-    std::lock_guard lock{mtx};
     views.at(paths.at(get_current_page()))->markWords(operation);
 } catch(const std::exception& e)
 {
@@ -85,7 +79,6 @@ void FileView::markWords(functions::Mark& operation) try
 
 std::string FileView::getSelectedText() const try
 {
-    std::lock_guard lock{mtx};
     return views.at(paths.at(get_current_page()))->getSelectedText();
 } catch(const std::exception& e)
 {
@@ -96,7 +89,6 @@ std::string FileView::getSelectedText() const try
 void FileView::closeTab(const std::string& path)
 {
     remove_page(*views.at(path));
-    std::lock_guard lock{mtx};
     views.erase(path);
     labels.erase(path);
     paths.erase(std::remove(paths.begin(), paths.end(), path));
@@ -104,7 +96,6 @@ void FileView::closeTab(const std::string& path)
 
 void FileView::onPageChanged(Gtk::Widget*, guint page) try
 {
-    std::lock_guard lock{mtx};
     views.at(paths.at(page))->updateBookmarks();
 } catch(const std::exception& e)
 {

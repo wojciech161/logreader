@@ -1,17 +1,10 @@
 #pragma once
 
 #include <gtkmm/liststore.h>
-#include <gtkmm/treemodel.h>
+#include "BookmarkColumns.hpp"
 
 namespace model
 {
-struct BookmarkColumns : public Gtk::TreeModel::ColumnRecord
-{
-    BookmarkColumns();
-    Gtk::TreeModelColumn<unsigned int> lineNumber;
-    Gtk::TreeModelColumn<Glib::ustring> bookmarkName;
-};
-
 class BookmarkList
 {
 public:

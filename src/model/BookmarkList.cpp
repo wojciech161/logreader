@@ -1,13 +1,7 @@
-#include "Bookmark.hpp"
+#include "BookmarkList.hpp"
 
 namespace model
 {
-BookmarkColumns::BookmarkColumns()
-{
-    add(lineNumber);
-    add(bookmarkName);
-}
-
 BookmarkList::BookmarkList(const BookmarkColumns& columns)
 : columns{columns}
 , bookmarks{Gtk::ListStore::create(columns)}

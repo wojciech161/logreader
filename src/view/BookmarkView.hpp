@@ -4,7 +4,7 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/treeview.h>
-#include "Bookmark.hpp"
+#include "BookmarkColumns.hpp"
 
 namespace view
 {

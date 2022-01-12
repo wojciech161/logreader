@@ -6,7 +6,7 @@
 #include "BufferCreator.hpp"
 #include "LogView.hpp"
 #include "TabLabel.hpp"
-#include "Bookmark.hpp"
+#include "BookmarkList.hpp"
 
 namespace functions
 {
