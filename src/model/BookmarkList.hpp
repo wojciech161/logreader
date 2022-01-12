@@ -12,6 +12,7 @@ public:
     ~BookmarkList();
 
     void add(int, const std::string&);
+    void remove(const Gtk::TreeModel::iterator&);
     int getBookmarkLine(const Gtk::TreeModel::Path&);
     const Glib::RefPtr<Gtk::ListStore>& getModel() const;
 

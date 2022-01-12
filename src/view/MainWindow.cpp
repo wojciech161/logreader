@@ -19,7 +19,7 @@ MainWindow::MainWindow(const Glib::RefPtr<Gtk::Application>& app)
 , bookmarkView{}
 , fileView{bookmarkView}
 {
-    set_title("LogReader version: 0.01");
+    set_title("LogReader version: 0.02");
     set_default_size(600, 600);
     signal_size_allocate().connect(sigc::mem_fun(*this, &MainWindow::onResize));
     initActions();
@@ -106,8 +106,8 @@ void MainWindow::onResize(Gtk::Allocation& allocation)
     constexpr int maxWidth = 300;
     int bookmarkListWidth = get_width() * 0.2;
     bookmarkListWidth > maxWidth ?
-        bookmarkView.set_min_content_width(maxWidth) :
-        bookmarkView.set_min_content_width(bookmarkListWidth);
+        bookmarkView.set_size_request(maxWidth) :
+        bookmarkView.set_size_request(bookmarkListWidth);
 }
 
 void MainWindow::initActions()

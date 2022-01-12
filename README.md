@@ -19,12 +19,8 @@ cmake ..
 make
 
 TODO/Ideas/Future plans:
-------------
-v. 0.02
-closing bookmarks (change to Gtk::ListBox??)
-------------
 v. 0.1
-refactor (separate layers, unify operations, prevent the same name in BaseTab (template function?))
+refactor (separate layers, unify operations, prevent the same function names in BaseTab (template function?))
 cmake refactor (introduce libs)
 UTs for controller and model layer
 memory leaks inspection

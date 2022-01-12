@@ -88,6 +88,11 @@ void BaseTab::onBookmarkActivated(const Gtk::TreeModel::Path& path)
     }
 }
 
+void BaseTab::deleteBookmark(const Gtk::TreeModel::iterator& iter)
+{
+    bookmarks.remove(iter);
+}
+
 BaseTab& BaseTab::getCurrentTab() // may throw (expected behavior)!!!
 {
     if (0 == get_current_page())

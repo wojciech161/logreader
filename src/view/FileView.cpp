@@ -50,7 +50,7 @@ void FileView::addBookmark(const std::string& name) try
     views.at(paths.at(get_current_page()))->addBookmark(name);
 } catch(const std::exception& e)
 {
-    std::cout << "Unable to perform grep: " << e.what() << std::endl;
+    std::cout << "Unable to perform bookmark: " << e.what() << std::endl;
 }
 
 void FileView::addMark(const std::string& word) try
@@ -58,7 +58,7 @@ void FileView::addMark(const std::string& word) try
     views.at(paths.at(get_current_page()))->addMark(word);
 } catch(const std::exception& e)
 {
-    std::cout << "Unable to perform grep: " << e.what() << std::endl;
+    std::cout << "Unable to perform mark: " << e.what() << std::endl;
 }
 
 void FileView::findNext(functions::Find& operation) try
@@ -66,7 +66,7 @@ void FileView::findNext(functions::Find& operation) try
     views.at(paths.at(get_current_page()))->findNext(operation);
 } catch(const std::exception& e)
 {
-    std::cout << "Unable to perform grep: " << e.what() << std::endl;
+    std::cout << "Unable to perform find: " << e.what() << std::endl;
 }
 
 void FileView::markWords(functions::Mark& operation) try
@@ -74,7 +74,7 @@ void FileView::markWords(functions::Mark& operation) try
     views.at(paths.at(get_current_page()))->markWords(operation);
 } catch(const std::exception& e)
 {
-    std::cout << "Unable to perform grep: " << e.what() << std::endl;
+    std::cout << "Unable to mark words: " << e.what() << std::endl;
 }
 
 std::string FileView::getSelectedText() const try
@@ -82,7 +82,7 @@ std::string FileView::getSelectedText() const try
     return views.at(paths.at(get_current_page()))->getSelectedText();
 } catch(const std::exception& e)
 {
-    std::cout << "Unable to perform grep: " << e.what() << std::endl;
+    std::cout << "Unable to select text: " << e.what() << std::endl;
     return "";
 }
 

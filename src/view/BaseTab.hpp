@@ -36,6 +36,7 @@ public:
     void markWords(functions::Mark&);
     std::string getSelectedText() const;
     void onBookmarkActivated(const Gtk::TreeModel::Path&);
+    void deleteBookmark(const Gtk::TreeModel::iterator&);
 
 private:
     BaseTab& getCurrentTab();

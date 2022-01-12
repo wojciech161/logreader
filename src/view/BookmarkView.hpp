@@ -1,5 +1,8 @@
 #pragma once
 
+#include <gtkmm/box.h>
+#include <gtkmm/button.h>
+#include <gtkmm/label.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treemodel.h>
@@ -13,7 +16,7 @@ class BaseTab;
 
 namespace view
 {
-class BookmarkView : public Gtk::ScrolledWindow
+class BookmarkView : public Gtk::Box
 {
 public:
     BookmarkView();
@@ -25,10 +28,14 @@ public:
 
 private:
     void onColumnActivated(const Gtk::TreeModel::Path&, Gtk::TreeViewColumn*);
+    void onBookmarkClose();
 
 private:
     model::BookmarkColumns columns;
+    Gtk::Label boxTitle;
+    Gtk::ScrolledWindow bookmarkWindow;
     Gtk::TreeView treeView;
+    Gtk::Button closeBookmarkButton;
     BaseTab* currentTab;
 };
 } // namespace view

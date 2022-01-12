@@ -21,6 +21,14 @@ void BookmarkList::add(int lineNumber, const std::string& name)
     row[columns.bookmarkName] = name;
 }
 
+void BookmarkList::remove(const Gtk::TreeModel::iterator& iter)
+{
+    if (iter)
+    {
+        bookmarks->erase(iter);
+    }
+}
+
 int BookmarkList::getBookmarkLine(const Gtk::TreeModel::Path& path)
 {
     auto childIter = bookmarks->get_iter(path);
