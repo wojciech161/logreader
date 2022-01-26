@@ -1,8 +1,6 @@
 #include "BaseTab.hpp"
 #include "LogView.hpp"
-#include "Find.hpp"
 #include "Grep.hpp"
-#include "Mark.hpp"
 #include "BookmarkView.hpp"
 
 #include <iostream>
@@ -12,8 +10,7 @@ namespace view
 BaseTab::BaseTab(const functions::BufferCreator& bufferCreator, BookmarkView& bookmarkView)
 : bookmarkView{bookmarkView}
 , name{bufferCreator.getName()}
-, baseLog{bufferCreator}
-, bookmarks{bookmarkView.getColumns()}
+, baseLog{bufferCreator, bookmarkView}
 {
     set_border_width(10);
     append_page(baseLog, "Base");
@@ -26,7 +23,6 @@ BaseTab::~BaseTab()
 {
     std::cout << "~BaseTab: " << name << std::endl;
     pageChangedConnection.disconnect();
-    bookmarkView.release(this);
 }
 
 void BaseTab::addGrep(functions::Grep& grep) try
@@ -37,39 +33,6 @@ void BaseTab::addGrep(functions::Grep& grep) try
     std::cout << "Unable to grep: " << e.what() << std::endl;
 }
 
-void BaseTab::addBookmark(const std::string& bookmarkName) try
-{
-    getCurrentTab().newBookmark(bookmarkName);
-} catch(const std::exception& e)
-{
-    std::cout << "Unable to add bookmark: " << e.what() << std::endl;
-}
-
-void BaseTab::addMark(const std::string& name) try
-{
-    std::cout << "Add mark: " << name << std::endl;
-    // getCurrentTab().newBookmark(bookmarkName);
-} catch(const std::exception& e)
-{
-    std::cout << "Unable to add mark: " << e.what() << std::endl;
-}
-
-void BaseTab::findNext(functions::Find& operation) try
-{
-    getCurrentTab().find(operation);
-} catch(const std::exception& e)
-{
-    std::cout << "Unable to perform find: " << e.what() << std::endl;
-}
-
-void BaseTab::markWords(functions::Mark& operation) try
-{
-    getCurrentTab().mark(operation);
-} catch(const std::exception& e)
-{
-    std::cout << "Unable to perform mark: " << e.what() << std::endl;
-}
-
 std::string BaseTab::getSelectedText() const try
 {
     return getCurrentTab().getSelection();
@@ -77,20 +40,6 @@ std::string BaseTab::getSelectedText() const try
 {
     std::cout << "Unable to perform mark: " << e.what() << std::endl;
     return "";
-}
-
-void BaseTab::onBookmarkActivated(const Gtk::TreeModel::Path& path)
-{
-    int line = bookmarks.getBookmarkLine(path);
-    if (line > 0)
-    {
-        goToLine(line);
-    }
-}
-
-void BaseTab::deleteBookmark(const Gtk::TreeModel::iterator& iter)
-{
-    bookmarks.remove(iter);
 }
 
 BaseTab& BaseTab::getCurrentTab() // may throw (expected behavior)!!!
@@ -135,15 +84,9 @@ void BaseTab::closeTab(const std::string& tabName)
     grepNames.erase(std::remove(grepNames.begin(), grepNames.end(), tabName));
 }
 
-void BaseTab::newBookmark(const std::string& bookmarkName)
-{
-    std::cout << "Add bookmark: " << bookmarkName << ", line: " << baseLog.getCurrentLine() << " for: " << name << std::endl;
-    bookmarks.add(baseLog.getCurrentLine(), bookmarkName);
-}
-
 void BaseTab::onPageChanged(Gtk::Widget*, guint) try
 {
-    getCurrentTab().updateBookmarksView();
+    getCurrentTab().updateBookmarks();
 } catch(const std::exception& e)
 {
     std::cout << "Unable to update bookmark: " << e.what() << std::endl;
@@ -151,36 +94,19 @@ void BaseTab::onPageChanged(Gtk::Widget*, guint) try
 
 void BaseTab::updateBookmarks() try
 {
-    getCurrentTab().updateBookmarksView();
+    getCurrentTab().getLog().updateBookmarksView();
 } catch(const std::exception& e)
 {
     std::cout << "Unable to update bookmark: " << e.what() << std::endl;
 }
 
-void BaseTab::updateBookmarksView()
-{
-    std::cout << "Update bookmarks view: " << name << std::endl;
-    bookmarkView.update(this, bookmarks.getModel());
-}
-
-void BaseTab::goToLine(int lineNum)
-{
-    std::cout << name << " go to " << lineNum << std::endl;
-    baseLog.goToLine(lineNum);
-}
-
-void BaseTab::find(functions::Find& operation)
-{
-    operation.run(baseLog);
-}
-
-void BaseTab::mark(functions::Mark& operation)
-{
-    operation.run(baseLog.getBuffer());
-}
-
 std::string BaseTab::getSelection() const
 {
     return baseLog.getSelectedText();
+}
+
+LogView& BaseTab::getLog()
+{
+    return baseLog;
 }
 } // namespace view

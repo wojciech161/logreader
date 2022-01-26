@@ -20,11 +20,9 @@ void FileView::addFile(const std::string& path) try
     if (views.find(path) == views.end())
     {
         functions::Open fileOpener{path};
-        {
-            labels.emplace(std::make_pair(path, std::make_unique<TabLabel>(fileOpener.getName(), [this, path](){closeTab(path);})));
-            views.emplace(std::make_pair(path, std::make_unique<BaseTab>(fileOpener, bookmarkView)));
-            paths.push_back(path);
-        }
+        labels.emplace(std::make_pair(path, std::make_unique<TabLabel>(fileOpener.getName(), [this, path](){closeTab(path);})));
+        views.emplace(std::make_pair(path, std::make_unique<BaseTab>(fileOpener, bookmarkView)));
+        paths.push_back(path);
         append_page(*views.at(path), *labels.at(path));
         show_all_children();
     }
@@ -45,36 +43,9 @@ void FileView::addGrep(functions::Grep& grep) try
     std::cout << "Unable to perform grep: " << e.what() << std::endl;
 }
 
-void FileView::addBookmark(const std::string& name) try
+LogView& FileView::getCurrentLog() // MAY THROW
 {
-    views.at(paths.at(get_current_page()))->addBookmark(name);
-} catch(const std::exception& e)
-{
-    std::cout << "Unable to perform bookmark: " << e.what() << std::endl;
-}
-
-void FileView::addMark(const std::string& word) try
-{
-    views.at(paths.at(get_current_page()))->addMark(word);
-} catch(const std::exception& e)
-{
-    std::cout << "Unable to perform mark: " << e.what() << std::endl;
-}
-
-void FileView::findNext(functions::Find& operation) try
-{
-    views.at(paths.at(get_current_page()))->findNext(operation);
-} catch(const std::exception& e)
-{
-    std::cout << "Unable to perform find: " << e.what() << std::endl;
-}
-
-void FileView::markWords(functions::Mark& operation) try
-{
-    views.at(paths.at(get_current_page()))->markWords(operation);
-} catch(const std::exception& e)
-{
-    std::cout << "Unable to mark words: " << e.what() << std::endl;
+    return views.at(paths.at(get_current_page()))->getCurrentTab().getLog();
 }
 
 std::string FileView::getSelectedText() const try

@@ -20,7 +20,6 @@ public:
 
 private: /*actions*/
     void onActionFileOpen();
-    void onActionFileQuit();
     void onActionToolsGrep();
     void onActionToolsFind();
     void onActionToolsMark();

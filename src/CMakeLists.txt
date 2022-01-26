@@ -16,6 +16,9 @@ add_executable(
 
     app/application.cpp
 
+    controller/Controller.cpp
+
+    functions/AddBookmark.cpp
     functions/Find.cpp
     functions/Grep.cpp
     functions/LogInserter.cpp
@@ -23,8 +26,10 @@ add_executable(
     functions/Match.cpp
     functions/Open.cpp
 
-    model/BookmarkColumns.cpp
+    model/Bookmark.cpp
     model/BookmarkList.cpp
+    model/Log.cpp
+    model/LogList.cpp
 
     view/AboutDialog.cpp
     view/BaseTab.cpp

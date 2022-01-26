@@ -10,9 +10,7 @@
 
 namespace functions
 {
-class Find;
 class Grep;
-class Mark;
 } // namespace functions
 namespace view
 {
@@ -28,26 +26,16 @@ public:
     virtual ~BaseTab();
 
     void addGrep(functions::Grep&);
-    void addBookmark(const std::string&);
     void updateBookmarks();
-    void goToLine(int);
-    void addMark(const std::string&);
-    void findNext(functions::Find&);
-    void markWords(functions::Mark&);
     std::string getSelectedText() const;
-    void onBookmarkActivated(const Gtk::TreeModel::Path&);
-    void deleteBookmark(const Gtk::TreeModel::iterator&);
-
-private:
     BaseTab& getCurrentTab();
     const BaseTab& getCurrentTab() const;
+    LogView& getLog();
+
+private:
     void addTab(functions::Grep&);
     void closeTab(const std::string&);
-    void newBookmark(const std::string&);
     void onPageChanged(Gtk::Widget*, guint);
-    void updateBookmarksView();
-    void find(functions::Find&);
-    void mark(functions::Mark&);
     std::string getSelection() const;
 
 private:
@@ -57,7 +45,6 @@ private:
     std::map<std::string, std::unique_ptr<TabLabel>> grepLabels;
     std::map<std::string, std::unique_ptr<BaseTab>> grepTabs;
     std::vector<std::string> grepNames;
-    model::BookmarkList bookmarks;
     sigc::connection pageChangedConnection;
 };
 } // namespaceview 

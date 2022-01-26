@@ -1,17 +1,17 @@
 #pragma once
 
 #include <string>
-#include <gtksourceviewmm/buffer.h>
+#include "Operation.hpp"
 
 namespace functions
 {
-class Mark
+class Mark : public Operation
 {
 public:
     Mark(const std::string&);
     ~Mark() = default;
 
-    void run(const Glib::RefPtr<Gsv::Buffer>&);
+    void run(view::LogView&) const override;
 
 private:
     std::string query;

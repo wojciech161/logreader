@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <iostream>
 #include <random>
+#include <gtksourceviewmm/buffer.h>
+#include "LogView.hpp"
 
 namespace
 {
@@ -28,8 +30,9 @@ Mark::Mark(const std::string& q)
         [](auto& c) {return std::tolower(c);});
 }
 
-void Mark::run(const Glib::RefPtr<Gsv::Buffer>& buffer)
+void Mark::run(view::LogView& logView) const
 {
+    const Glib::RefPtr<Gsv::Buffer>& buffer{logView.getBuffer()};
     auto currentTag = buffer->get_tag_table()->lookup(query);
     if (not currentTag)
     {

@@ -1,5 +1,5 @@
 #include "BookmarkView.hpp"
-#include "BaseTab.hpp"
+#include "LogView.hpp"
 #include <iostream>
 
 namespace view
@@ -24,14 +24,14 @@ BookmarkView::BookmarkView()
     closeBookmarkButton.signal_clicked().connect(sigc::mem_fun(*this, &BookmarkView::onBookmarkClose));
 }
 
-const model::BookmarkColumns& BookmarkView::getColumns() const
+const model::Bookmark& BookmarkView::getColumns() const
 {
     return columns;
 }
 
-void BookmarkView::update(BaseTab* baseTab, const Glib::RefPtr<Gtk::ListStore>& model)
+void BookmarkView::update(LogView* logView, const Glib::RefPtr<Gtk::ListStore>& model)
 {
-    currentTab = baseTab;
+    currentTab = logView;
     treeView.set_model(model);
 }
 
@@ -43,7 +43,7 @@ void BookmarkView::onColumnActivated(const Gtk::TreeModel::Path& path, Gtk::Tree
     }
 }
 
-void BookmarkView::release(BaseTab* tab)
+void BookmarkView::release(LogView* tab)
 {
     if (currentTab == tab)
     {

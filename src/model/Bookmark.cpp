@@ -1,8 +1,8 @@
-#include "BookmarkColumns.hpp"
+#include "Bookmark.hpp"
 
 namespace model
 {
-BookmarkColumns::BookmarkColumns()
+Bookmark::Bookmark()
 {
     add(lineNumber);
     add(bookmarkName);

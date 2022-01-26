@@ -4,9 +4,9 @@
 
 namespace model
 {
-struct BookmarkColumns : public Gtk::TreeModel::ColumnRecord
+struct Bookmark : public Gtk::TreeModel::ColumnRecord
 {
-    BookmarkColumns();
+    Bookmark();
     Gtk::TreeModelColumn<unsigned int> lineNumber;
     Gtk::TreeModelColumn<Glib::ustring> bookmarkName;
 };

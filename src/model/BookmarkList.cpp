@@ -2,7 +2,7 @@
 
 namespace model
 {
-BookmarkList::BookmarkList(const BookmarkColumns& columns)
+BookmarkList::BookmarkList(const Bookmark& columns)
 : columns{columns}
 , bookmarks{Gtk::ListStore::create(columns)}
 {

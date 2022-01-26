@@ -9,7 +9,7 @@ Find::Find(const std::string& query, bool caseSensitive)
 : query{query}
 , caseSensitive{caseSensitive} {}
 
-void Find::run(view::LogView& logView)
+void Find::run(view::LogView& logView) const
 {
     const auto buffer = logView.getBuffer();
     auto cursorPosition = buffer->get_insert();

@@ -1,14 +1,14 @@
 #pragma once
 
 #include <gtkmm/liststore.h>
-#include "BookmarkColumns.hpp"
+#include "Bookmark.hpp"
 
 namespace model
 {
 class BookmarkList
 {
 public:
-    BookmarkList(const BookmarkColumns&);
+    BookmarkList(const Bookmark&);
     ~BookmarkList();
 
     void add(int, const std::string&);
@@ -17,7 +17,7 @@ public:
     const Glib::RefPtr<Gtk::ListStore>& getModel() const;
 
 private:
-    const BookmarkColumns& columns;
+    const Bookmark& columns;
     Glib::RefPtr<Gtk::ListStore> bookmarks;
 };
 } // namespace model

@@ -9,6 +9,7 @@
 #include "Find.hpp"
 #include "Grep.hpp"
 #include "Mark.hpp"
+#include "AddBookmark.hpp"
 #include <iostream>
 
 namespace view
@@ -38,11 +39,6 @@ void MainWindow::onActionFileOpen()
     }
 }
 
-void MainWindow::onActionFileQuit()
-{
-    hide();
-}
-
 void MainWindow::onActionToolsGrep()
 {
     GrepDialog dialog(*this, fileView.getSelectedText());
@@ -54,18 +50,21 @@ void MainWindow::onActionToolsGrep()
     }
 }
 
-void MainWindow::onActionToolsFind()
+void MainWindow::onActionToolsFind() try
 {
     FindDialog dialog(*this, fileView.getSelectedText());
     auto result = dialog.show();
     if (result.success)
     {
         functions::Find operation{result.query, result.caseSensitive};
-        fileView.findNext(operation);
+        operation.run(fileView.getCurrentLog());
     }
+} catch(const std::exception& e)
+{
+    std::cout << "Unable to perform find: " << e.what() << std::endl;
 }
 
-void MainWindow::onActionToolsMark()
+void MainWindow::onActionToolsMark() try
 {
     const auto selectedText = fileView.getSelectedText();
     if (selectedText.empty())
@@ -75,24 +74,31 @@ void MainWindow::onActionToolsMark()
         if (result.success)
         {
             functions::Mark operation{result.query};
-            fileView.markWords(operation);
+            operation.run(fileView.getCurrentLog());
         }
     }
     else
     {
         functions::Mark operation{selectedText};
-        fileView.markWords(operation);
+        operation.run(fileView.getCurrentLog());
     }
+} catch(const std::exception& e)
+{
+    std::cout << "Unable to perform mark: " << e.what() << std::endl;
 }
 
-void MainWindow::onActionToolsBookmark()
+void MainWindow::onActionToolsBookmark() try
 {
     BookmarkDialog dialog(*this);
     auto result = dialog.show();
     if (result.success)
     {
-        fileView.addBookmark(result.name);
+        functions::AddBookmark operation{result.name};
+        operation.run(fileView.getCurrentLog());
     }
+} catch(const std::exception& e)
+{
+    std::cout << "Unable to perform bookmark: " << e.what() << std::endl;
 }
 
 void MainWindow::onActionHelpAbout()
@@ -114,7 +120,7 @@ void MainWindow::initActions()
 {
     refActionGroup = Gio::SimpleActionGroup::create();
     refActionGroup->add_action("open", sigc::mem_fun(*this, &MainWindow::onActionFileOpen));
-    refActionGroup->add_action("quit", sigc::mem_fun(*this, &MainWindow::onActionFileQuit));
+    refActionGroup->add_action("quit", sigc::mem_fun(*this, &MainWindow::hide));
     refActionGroup->add_action("grep", sigc::mem_fun(*this, &MainWindow::onActionToolsGrep));
     refActionGroup->add_action("find", sigc::mem_fun(*this, &MainWindow::onActionToolsFind));
     refActionGroup->add_action("mark", sigc::mem_fun(*this, &MainWindow::onActionToolsMark));

@@ -11,13 +11,12 @@
 
 namespace functions
 {
-class Find;
 class Grep;
-class Mark;
 } // namespace functions 
 namespace view
 {
 class BookmarkView;
+class LogView;
 } // namespace view
 
 namespace view
@@ -30,10 +29,7 @@ public:
 
     void addFile(const std::string&);
     void addGrep(functions::Grep&);
-    void addBookmark(const std::string&);
-    void addMark(const std::string&);
-    void findNext(functions::Find&);
-    void markWords(functions::Mark&);
+    LogView& getCurrentLog();
     std::string getSelectedText() const;
 
 private:

@@ -5,16 +5,15 @@
 
 namespace functions
 {
-class Find : public Operation
+class AddBookmark : public Operation
 {
 public:
-    Find(const std::string&, bool);
-    ~Find() = default;
+    AddBookmark(const std::string&);
+    virtual ~AddBookmark() = default;
 
     void run(view::LogView&) const override;
 
 private:
-    std::string query;
-    bool caseSensitive;
+    std::string bookmarkName;
 };
 } // namespace functions

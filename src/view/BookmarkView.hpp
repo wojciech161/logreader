@@ -7,11 +7,11 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/treeview.h>
-#include "BookmarkColumns.hpp"
+#include "Bookmark.hpp"
 
 namespace view
 {
-class BaseTab;
+class LogView;
 } // namespace view
 
 namespace view
@@ -22,20 +22,20 @@ public:
     BookmarkView();
     virtual ~BookmarkView() = default;
 
-    const model::BookmarkColumns& getColumns() const;
-    void update(BaseTab*, const Glib::RefPtr<Gtk::ListStore>&);
-    void release(BaseTab*);
+    const model::Bookmark& getColumns() const;
+    void update(LogView*, const Glib::RefPtr<Gtk::ListStore>&);
+    void release(LogView*);
 
 private:
     void onColumnActivated(const Gtk::TreeModel::Path&, Gtk::TreeViewColumn*);
     void onBookmarkClose();
 
 private:
-    model::BookmarkColumns columns;
+    model::Bookmark columns;
     Gtk::Label boxTitle;
     Gtk::ScrolledWindow bookmarkWindow;
     Gtk::TreeView treeView;
     Gtk::Button closeBookmarkButton;
-    BaseTab* currentTab;
+    LogView* currentTab;
 };
 } // namespace view
