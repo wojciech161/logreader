@@ -45,17 +45,6 @@ void LogView::goToLine(int lineNum)
     textView.scroll_to(iter);
 }
 
-std::string LogView::getSelectedText() const
-{
-    Gtk::TextIter selectionStart, selectionEnd;
-    if (buffer->get_selection_bounds(selectionStart, selectionEnd))
-    {
-        buffer->place_cursor(selectionEnd);
-        return buffer->get_text(selectionStart, selectionEnd);
-    }
-    return "";
-}
-
 void LogView::onBookmarkActivated(const Gtk::TreeModel::Path& path)
 {
     int line = bookmarks.getBookmarkLine(path);

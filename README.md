@@ -5,7 +5,7 @@ Features:
 - Grep (tabs)
 - Mark words
 - Find
-- Bookmark
+- Add/remove Bookmarks per tab
 
 Dependencies (ubuntu 20.04):
 cmake
@@ -21,16 +21,14 @@ make
 TODO/Ideas/Future plans:
 v. 0.1
 refactor (separate layers, unify operations, prevent the same function names in BaseTab (template function?))
-model: Log, LogList, Bookmark, BookmarkList
+model: Log, LogList, Bookmark, BookmarkList, model as logId, fileId, ids in view(?)
 functions: all ops unified (also open/grep), +NameGenerator
 controller: new folder, all logic moved there
 cmake refactor (introduce libs)
 add icon (https://stackoverflow.com/questions/63697778/how-to-use-glib-compile-resources-with-cmake, Gio::Resources (gtkmm tutorial))
-Readme with current functionality
 push commit to remote
 UTs for controller and model layer
 memory leaks inspection
-model as logId, fileId
 ------------
 v 0.2
 error dialogs
@@ -39,6 +37,7 @@ Reopen file
 ------------
 v. 0.3
 bookmark mapped to fileId, not logId
+Scrolling to the middle of text view when finding/clicking on bookmark (currently scroll is at the end)
 ------------
 v. 0.4
 settings/bookmarks from configuration file, options menu

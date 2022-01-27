@@ -33,25 +33,7 @@ void BaseTab::addGrep(functions::Grep& grep) try
     std::cout << "Unable to grep: " << e.what() << std::endl;
 }
 
-std::string BaseTab::getSelectedText() const try
-{
-    return getCurrentTab().getSelection();
-} catch(const std::exception& e)
-{
-    std::cout << "Unable to perform mark: " << e.what() << std::endl;
-    return "";
-}
-
 BaseTab& BaseTab::getCurrentTab() // may throw (expected behavior)!!!
-{
-    if (0 == get_current_page())
-    {
-        return *this;
-    }
-    return grepTabs.at(grepNames.at(get_current_page() - 1))->getCurrentTab();
-}
-
-const BaseTab& BaseTab::getCurrentTab() const // may throw (expected behavior)!!!
 {
     if (0 == get_current_page())
     {
@@ -98,11 +80,6 @@ void BaseTab::updateBookmarks() try
 } catch(const std::exception& e)
 {
     std::cout << "Unable to update bookmark: " << e.what() << std::endl;
-}
-
-std::string BaseTab::getSelection() const
-{
-    return baseLog.getSelectedText();
 }
 
 LogView& BaseTab::getLog()

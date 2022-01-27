@@ -30,7 +30,6 @@ public:
     void addFile(const std::string&);
     void addGrep(functions::Grep&);
     LogView& getCurrentLog();
-    std::string getSelectedText() const;
 
 private:
     void closeTab(const std::string&);

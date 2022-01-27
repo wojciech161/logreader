@@ -20,6 +20,7 @@ add_executable(
 
     functions/AddBookmark.cpp
     functions/Find.cpp
+    functions/GetSelection.cpp
     functions/Grep.cpp
     functions/LogInserter.cpp
     functions/Mark.cpp

@@ -48,15 +48,6 @@ LogView& FileView::getCurrentLog() // MAY THROW
     return views.at(paths.at(get_current_page()))->getCurrentTab().getLog();
 }
 
-std::string FileView::getSelectedText() const try
-{
-    return views.at(paths.at(get_current_page()))->getSelectedText();
-} catch(const std::exception& e)
-{
-    std::cout << "Unable to select text: " << e.what() << std::endl;
-    return "";
-}
-
 void FileView::closeTab(const std::string& path)
 {
     remove_page(*views.at(path));

@@ -10,7 +10,26 @@
 #include "Grep.hpp"
 #include "Mark.hpp"
 #include "AddBookmark.hpp"
+#include "GetSelection.hpp"
 #include <iostream>
+
+namespace
+{
+std::string getSelection(view::LogView& logView, bool shouldUnmark = true) try
+{
+    std::string result;
+    functions::GetSelection operation{result, shouldUnmark};
+    operation.run(logView);
+    return result;
+}
+catch(const std::exception& e)
+{
+    std::cerr << "Unable to get selected text: " << e.what() << '\n';
+    return "";
+}
+
+} // namespace
+
 
 namespace view
 {
@@ -41,7 +60,8 @@ void MainWindow::onActionFileOpen()
 
 void MainWindow::onActionToolsGrep()
 {
-    GrepDialog dialog(*this, fileView.getSelectedText());
+    LogView& currentLog{fileView.getCurrentLog()};
+    GrepDialog dialog(*this, getSelection(currentLog));
     auto result = dialog.show();
     if (result.success)
     {
@@ -52,12 +72,13 @@ void MainWindow::onActionToolsGrep()
 
 void MainWindow::onActionToolsFind() try
 {
-    FindDialog dialog(*this, fileView.getSelectedText());
+    LogView& currentLog{fileView.getCurrentLog()};
+    FindDialog dialog(*this, getSelection(currentLog));
     auto result = dialog.show();
     if (result.success)
     {
         functions::Find operation{result.query, result.caseSensitive};
-        operation.run(fileView.getCurrentLog());
+        operation.run(currentLog);
     }
 } catch(const std::exception& e)
 {
@@ -66,7 +87,8 @@ void MainWindow::onActionToolsFind() try
 
 void MainWindow::onActionToolsMark() try
 {
-    const auto selectedText = fileView.getSelectedText();
+    LogView& currentLog{fileView.getCurrentLog()};
+    const auto selectedText = getSelection(currentLog, false);
     if (selectedText.empty())
     {
         MarkDialog dialog(*this);
@@ -74,13 +96,13 @@ void MainWindow::onActionToolsMark() try
         if (result.success)
         {
             functions::Mark operation{result.query};
-            operation.run(fileView.getCurrentLog());
+            operation.run(currentLog);
         }
     }
     else
     {
         functions::Mark operation{selectedText};
-        operation.run(fileView.getCurrentLog());
+        operation.run(currentLog);
     }
 } catch(const std::exception& e)
 {

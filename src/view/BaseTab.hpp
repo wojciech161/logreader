@@ -27,16 +27,13 @@ public:
 
     void addGrep(functions::Grep&);
     void updateBookmarks();
-    std::string getSelectedText() const;
     BaseTab& getCurrentTab();
-    const BaseTab& getCurrentTab() const;
     LogView& getLog();
 
 private:
     void addTab(functions::Grep&);
     void closeTab(const std::string&);
     void onPageChanged(Gtk::Widget*, guint);
-    std::string getSelection() const;
 
 private:
     BookmarkView& bookmarkView;
