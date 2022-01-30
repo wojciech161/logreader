@@ -1,40 +1,30 @@
 #include "Grep.hpp"
-#include <exception>
 #include <iostream>
+#include <gtksourceviewmm/buffer.h>
+#include "LogView.hpp"
 #include "Match.hpp"
 #include "LogInserter.hpp"
 
-namespace
-{
-std::string createName(const std::string& query, bool regexp, bool caseSensitive, bool inverted)
-{
-    std::string options{"."};
-    options += regexp ? "R" : "r";
-    options += caseSensitive ? "C" : "c";
-    options += inverted ? "I" : "i";
-    return query + options;
-}
-} // namespace
-
 namespace functions
 {
-Grep::Grep(const std::string& query, bool regexp, bool caseSensitive, bool inverted)
-: lineMatch{createMatcher(query, regexp, caseSensitive, inverted)}
-, name{createName(query, regexp, caseSensitive, inverted)} {}
+Grep::Grep(const view::LogView& base, const std::string& query, bool regexp, bool caseSensitive, bool inverted)
+: base{base}
+, lineMatch{createMatcher(query, regexp, caseSensitive, inverted)} {}
 
-Glib::RefPtr<Gsv::Buffer> Grep::createBuffer() const
+void Grep::run(view::LogView& logView) const
 {
-    Glib::RefPtr<Gsv::Buffer> buffer{Gsv::Buffer::create()};
-    LogInserter inserter{buffer};
-    if (not base) return buffer;
-    if (base->get_line_count() < 2) return buffer;
-    auto lineBegin = base->get_iter_at_line(0);
+    const auto& baseBuffer = base.getBuffer();
+    auto& targetBuffer = logView.getBuffer();
+    LogInserter inserter{targetBuffer};
+    if (not baseBuffer) return;
+    if (baseBuffer->get_line_count() < 2) return;
+    auto lineBegin = baseBuffer->get_iter_at_line(0);
     try
     {
-        for (int i = 1; i <= base->get_line_count(); ++i)
+        for (int i = 1; i <= baseBuffer->get_line_count(); ++i)
         {
-            auto lineEnd = base->get_iter_at_line(i);
-            auto line = base->get_text(lineBegin, lineEnd);
+            auto lineEnd = baseBuffer->get_iter_at_line(i);
+            auto line = baseBuffer->get_text(lineBegin, lineEnd);
             if (lineMatch(line.raw()))
             {
                 inserter.addLine(line);
@@ -46,17 +36,6 @@ Glib::RefPtr<Gsv::Buffer> Grep::createBuffer() const
     {
         std::cout << "Error encountered during grep: " << e.what() << std::endl;
     }
-    buffer->place_cursor(buffer->get_iter_at_line(0));
-    return buffer;
-}
-
-std::string Grep::getName() const
-{
-    return name;
-}
-
-void Grep::setBase(const Glib::RefPtr<Gsv::Buffer>& baseBuffer)
-{
-    base = baseBuffer;
+    baseBuffer->place_cursor(baseBuffer->get_iter_at_line(0));
 }
 } // namespace functions

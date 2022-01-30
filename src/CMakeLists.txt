@@ -25,7 +25,8 @@ add_executable(
     functions/LogInserter.cpp
     functions/Mark.cpp
     functions/Match.cpp
-    functions/Open.cpp
+    functions/NameCreator.cpp
+    functions/OpenSingle.cpp
 
     model/Bookmark.cpp
     model/BookmarkList.cpp
@@ -37,7 +38,6 @@ add_executable(
     view/BookmarkDialog.cpp
     view/BookmarkView.cpp
     view/FileChooser.cpp
-    view/FileView.cpp
     view/FindDialog.cpp
     view/GrepDialog.cpp
     view/MarkDialog.cpp

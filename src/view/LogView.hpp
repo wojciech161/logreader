@@ -5,7 +5,6 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtksourceviewmm/buffer.h>
 #include <gtksourceviewmm/view.h>
-#include "BufferCreator.hpp"
 #include "BookmarkList.hpp"
 
 namespace view
@@ -18,10 +17,11 @@ namespace view
 class LogView : public Gtk::ScrolledWindow
 {
 public:
-    LogView(const functions::BufferCreator&, BookmarkView&);
+    LogView(BookmarkView&);
     virtual ~LogView();
 
     const Glib::RefPtr<Gsv::Buffer>& getBuffer() const;
+    Glib::RefPtr<Gsv::Buffer>& getBuffer();
     int getCurrentLine() const;
     void goToLine(int);
     void onBookmarkActivated(const Gtk::TreeModel::Path&);

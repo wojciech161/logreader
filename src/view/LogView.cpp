@@ -6,8 +6,8 @@
 
 namespace view
 {
-LogView::LogView(const functions::BufferCreator& bufferCreator, BookmarkView& bookmarkView)
-: buffer{bufferCreator.createBuffer()}
+LogView::LogView(BookmarkView& bookmarkView)
+: buffer{Gsv::Buffer::create()}
 , bookmarkView{bookmarkView}
 , bookmarks{bookmarkView.getColumns()}
 {
@@ -27,6 +27,11 @@ LogView::~LogView()
 }
 
 const Glib::RefPtr<Gsv::Buffer>& LogView::getBuffer() const
+{
+    return buffer;
+}
+
+Glib::RefPtr<Gsv::Buffer>& LogView::getBuffer()
 {
     return buffer;
 }

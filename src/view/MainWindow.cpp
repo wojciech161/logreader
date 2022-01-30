@@ -11,6 +11,8 @@
 #include "Mark.hpp"
 #include "AddBookmark.hpp"
 #include "GetSelection.hpp"
+#include "OpenSingle.hpp"
+#include "NameCreator.hpp"
 #include <iostream>
 
 namespace
@@ -27,9 +29,7 @@ catch(const std::exception& e)
     std::cerr << "Unable to get selected text: " << e.what() << '\n';
     return "";
 }
-
 } // namespace
-
 
 namespace view
 {
@@ -37,9 +37,9 @@ MainWindow::MainWindow(const Glib::RefPtr<Gtk::Application>& app)
 : topContainer(Gtk::ORIENTATION_VERTICAL)
 , mainContainer(Gtk::ORIENTATION_HORIZONTAL)
 , bookmarkView{}
-, fileView{bookmarkView}
+, fileView{bookmarkView, false}
 {
-    set_title("LogReader version: 0.02");
+    set_title("LogReader version: 0.03");
     set_default_size(600, 600);
     signal_size_allocate().connect(sigc::mem_fun(*this, &MainWindow::onResize));
     initActions();
@@ -48,31 +48,40 @@ MainWindow::MainWindow(const Glib::RefPtr<Gtk::Application>& app)
     show_all_children();
 }
 
-void MainWindow::onActionFileOpen()
+void MainWindow::onActionFileOpen() try
 {
     FileChooser fileChooser(*this);
     std::string path = fileChooser.getFilepath();
     if (not path.empty())
     {
-        fileView.addFile(path);
+        functions::OpenSingle operation{path};
+        auto& newTab = fileView.addTab(functions::createName(path), true);
+        operation.run(newTab);
     }
+} catch(const std::exception& e)
+{
+    std::cout << "Unable to perform find: " << e.what() << std::endl;
 }
 
-void MainWindow::onActionToolsGrep()
+void MainWindow::onActionToolsGrep() try
 {
-    LogView& currentLog{fileView.getCurrentLog()};
-    GrepDialog dialog(*this, getSelection(currentLog));
+    BaseTab& currentTab{fileView.getCurrentTab()};
+    GrepDialog dialog(*this, getSelection(currentTab.getLog()));
     auto result = dialog.show();
     if (result.success)
     {
-        functions::Grep operation{result.query, result.regexp, result.caseSensitive, result.inverted};
-        fileView.addGrep(operation);
+        functions::Grep operation{currentTab.getLog(), result.query, result.regexp, result.caseSensitive, result.inverted};
+        auto& newTab = currentTab.addTab(functions::createName(result.query, result.regexp, result.caseSensitive, result.inverted), true);
+        operation.run(newTab);
     }
+} catch(const std::exception& e)
+{
+    std::cout << "Unable to perform grep: " << e.what() << std::endl;
 }
 
 void MainWindow::onActionToolsFind() try
 {
-    LogView& currentLog{fileView.getCurrentLog()};
+    LogView& currentLog{fileView.getCurrentTab().getLog()};
     FindDialog dialog(*this, getSelection(currentLog));
     auto result = dialog.show();
     if (result.success)
@@ -87,7 +96,7 @@ void MainWindow::onActionToolsFind() try
 
 void MainWindow::onActionToolsMark() try
 {
-    LogView& currentLog{fileView.getCurrentLog()};
+    LogView& currentLog{fileView.getCurrentTab().getLog()};
     const auto selectedText = getSelection(currentLog, false);
     if (selectedText.empty())
     {
@@ -116,7 +125,7 @@ void MainWindow::onActionToolsBookmark() try
     if (result.success)
     {
         functions::AddBookmark operation{result.name};
-        operation.run(fileView.getCurrentLog());
+        operation.run(fileView.getCurrentTab().getLog());
     }
 } catch(const std::exception& e)
 {

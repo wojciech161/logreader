@@ -1,61 +1,62 @@
 #include "BaseTab.hpp"
 #include "LogView.hpp"
-#include "Grep.hpp"
 #include "BookmarkView.hpp"
 
 #include <iostream>
 
 namespace view
 {
-BaseTab::BaseTab(const functions::BufferCreator& bufferCreator, BookmarkView& bookmarkView)
+BaseTab::BaseTab(BookmarkView& bookmarkView, bool createBase)
 : bookmarkView{bookmarkView}
-, name{bufferCreator.getName()}
-, baseLog{bufferCreator, bookmarkView}
+, baseLog{bookmarkView}
 {
     set_border_width(10);
-    append_page(baseLog, "Base");
-    show_all_children();
     pageChangedConnection = 
         signal_switch_page().connect(sigc::mem_fun(*this, &BaseTab::onPageChanged));
+    if (createBase)
+    {
+        append_page(baseLog, "Base");
+    }
+    show_all_children();
 }
 
 BaseTab::~BaseTab()
 {
-    std::cout << "~BaseTab: " << name << std::endl;
+    std::cout << "~BaseTab()\n";
     pageChangedConnection.disconnect();
-}
-
-void BaseTab::addGrep(functions::Grep& grep) try
-{
-    getCurrentTab().addTab(grep);
-} catch(const std::exception& e)
-{
-    std::cout << "Unable to grep: " << e.what() << std::endl;
 }
 
 BaseTab& BaseTab::getCurrentTab() // may throw (expected behavior)!!!
 {
-    if (0 == get_current_page())
+    auto* currentTab = get_nth_page(get_current_page());
+    if (currentTab)
     {
-        return *this;
+        const auto& currentTabText = get_tab_label_text(*currentTab);
+        if ("Base" == currentTabText)
+        {
+            return *this;
+        }
+        return dynamic_cast<BaseTab*>(currentTab)->getCurrentTab();
     }
-    return grepTabs.at(grepNames.at(get_current_page() - 1))->getCurrentTab();
+    else
+    {
+        throw std::runtime_error("Could not get a tab!");
+    }
 }
 
-void BaseTab::addTab(functions::Grep& grep)
+LogView& BaseTab::addTab(const std::string& name, bool createBase)
 {
-    std::string grepName{grep.getName()};
-    if (grepTabs.find(grepName) != grepTabs.end())
-    {
-        std::cout << "Grep already exists. Skipping.\n";
-        return;
-    }
-    grep.setBase(baseLog.getBuffer());
-    grepLabels.emplace(std::make_pair(grepName, std::make_unique<TabLabel>(grepName, [this, grepName](){closeTab(grepName);})));
-    grepTabs.emplace(std::make_pair(grepName, std::make_unique<BaseTab>(grep, bookmarkView)));
-    grepNames.push_back(grepName);
-    append_page(*grepTabs.at(grepName), *grepLabels.at(grepName));
+    // if (grepTabs.find(name) != grepTabs.end()) // Should be moved to model
+    // {
+    //     std::cout << "Grep already exists. Skipping.\n";
+    //     return;
+    // }
+    grepLabels.emplace(std::make_pair(name, std::make_unique<TabLabel>(name, [this, name](){closeTab(name);})));
+    grepTabs.emplace(std::make_pair(name, std::make_unique<BaseTab>(bookmarkView, createBase)));
+    grepNames.push_back(name);
+    append_page(*grepTabs.at(name), *grepLabels.at(name));
     show_all_children();
+    return grepTabs[name]->getLog();
 }
 
 void BaseTab::closeTab(const std::string& tabName)
@@ -67,14 +68,6 @@ void BaseTab::closeTab(const std::string& tabName)
 }
 
 void BaseTab::onPageChanged(Gtk::Widget*, guint) try
-{
-    getCurrentTab().updateBookmarks();
-} catch(const std::exception& e)
-{
-    std::cout << "Unable to update bookmark: " << e.what() << std::endl;
-}
-
-void BaseTab::updateBookmarks() try
 {
     getCurrentTab().getLog().updateBookmarksView();
 } catch(const std::exception& e)

@@ -2,24 +2,20 @@
 
 #include <functional>
 #include <string>
-#include "BufferCreator.hpp"
+#include "Operation.hpp"
 
 namespace functions
 {
-class Grep : public BufferCreator
+class Grep : public Operation
 {
 public:
-    Grep(const std::string&, bool, bool, bool);
-    virtual ~Grep() = default;
+    Grep(const view::LogView&, const std::string&, bool, bool, bool);
+    ~Grep() = default;
 
-    Glib::RefPtr<Gsv::Buffer> createBuffer() const override;
-    std::string getName() const override;
-    void setBase(const Glib::RefPtr<Gsv::Buffer>&);
+    void run(view::LogView&) const override;
 
 private:
+    const view::LogView& base;
     std::function<bool(const std::string&)> lineMatch;
-    std::string name;
-    Glib::RefPtr<Gsv::Buffer> base;
-    
 };
 } // namespace functions
