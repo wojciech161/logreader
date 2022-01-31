@@ -1,4 +1,4 @@
-#include "BaseTab.hpp"
+#include "LogContainer.hpp"
 #include "LogView.hpp"
 #include "BookmarkView.hpp"
 
@@ -6,13 +6,13 @@
 
 namespace view
 {
-BaseTab::BaseTab(BookmarkView& bookmarkView, bool createBase)
+LogContainer::LogContainer(BookmarkView& bookmarkView, bool createBase)
 : bookmarkView{bookmarkView}
 , baseLog{bookmarkView}
 {
     set_border_width(10);
     pageChangedConnection = 
-        signal_switch_page().connect(sigc::mem_fun(*this, &BaseTab::onPageChanged));
+        signal_switch_page().connect(sigc::mem_fun(*this, &LogContainer::onPageChanged));
     if (createBase)
     {
         append_page(baseLog, "Base");
@@ -20,13 +20,13 @@ BaseTab::BaseTab(BookmarkView& bookmarkView, bool createBase)
     show_all_children();
 }
 
-BaseTab::~BaseTab()
+LogContainer::~LogContainer()
 {
-    std::cout << "~BaseTab()\n";
+    std::cout << "~LogContainer()\n";
     pageChangedConnection.disconnect();
 }
 
-BaseTab& BaseTab::getCurrentTab() // may throw (expected behavior)!!!
+LogContainer& LogContainer::getCurrentTab() // may throw (expected behavior)!!!
 {
     auto* currentTab = get_nth_page(get_current_page());
     if (currentTab)
@@ -36,7 +36,7 @@ BaseTab& BaseTab::getCurrentTab() // may throw (expected behavior)!!!
         {
             return *this;
         }
-        return dynamic_cast<BaseTab*>(currentTab)->getCurrentTab();
+        return dynamic_cast<LogContainer*>(currentTab)->getCurrentTab();
     }
     else
     {
@@ -44,7 +44,7 @@ BaseTab& BaseTab::getCurrentTab() // may throw (expected behavior)!!!
     }
 }
 
-LogView& BaseTab::addTab(const std::string& name, bool createBase)
+LogView& LogContainer::addTab(const std::string& name, bool createBase)
 {
     // if (grepTabs.find(name) != grepTabs.end()) // Should be moved to model
     // {
@@ -52,14 +52,14 @@ LogView& BaseTab::addTab(const std::string& name, bool createBase)
     //     return;
     // }
     grepLabels.emplace(std::make_pair(name, std::make_unique<TabLabel>(name, [this, name](){closeTab(name);})));
-    grepTabs.emplace(std::make_pair(name, std::make_unique<BaseTab>(bookmarkView, createBase)));
+    grepTabs.emplace(std::make_pair(name, std::make_unique<LogContainer>(bookmarkView, createBase)));
     grepNames.push_back(name);
     append_page(*grepTabs.at(name), *grepLabels.at(name));
     show_all_children();
     return grepTabs[name]->getLog();
 }
 
-void BaseTab::closeTab(const std::string& tabName)
+void LogContainer::closeTab(const std::string& tabName)
 {
     remove_page(*grepTabs.at(tabName));
     grepTabs.erase(tabName);
@@ -67,7 +67,7 @@ void BaseTab::closeTab(const std::string& tabName)
     grepNames.erase(std::remove(grepNames.begin(), grepNames.end(), tabName));
 }
 
-void BaseTab::onPageChanged(Gtk::Widget*, guint) try
+void LogContainer::onPageChanged(Gtk::Widget*, guint) try
 {
     getCurrentTab().getLog().updateBookmarksView();
 } catch(const std::exception& e)
@@ -75,7 +75,7 @@ void BaseTab::onPageChanged(Gtk::Widget*, guint) try
     std::cout << "Unable to update bookmark: " << e.what() << std::endl;
 }
 
-LogView& BaseTab::getLog()
+LogView& LogContainer::getLog()
 {
     return baseLog;
 }

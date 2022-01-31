@@ -65,7 +65,7 @@ void MainWindow::onActionFileOpen() try
 
 void MainWindow::onActionToolsGrep() try
 {
-    BaseTab& currentTab{fileView.getCurrentTab()};
+    LogContainer& currentTab{fileView.getCurrentTab()};
     GrepDialog dialog(*this, getSelection(currentTab.getLog()));
     auto result = dialog.show();
     if (result.success)

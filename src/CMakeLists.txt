@@ -34,13 +34,13 @@ add_executable(
     model/LogList.cpp
 
     view/AboutDialog.cpp
-    view/BaseTab.cpp
     view/BookmarkDialog.cpp
     view/BookmarkView.cpp
     view/FileChooser.cpp
     view/FindDialog.cpp
     view/GrepDialog.cpp
     view/MarkDialog.cpp
+    view/LogContainer.cpp
     view/LogView.cpp
     view/MainWindow.cpp
     view/MenuBuilder.cpp

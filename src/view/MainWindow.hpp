@@ -8,7 +8,7 @@
 
 #include "BookmarkView.hpp"
 #include "MenuBuilder.hpp"
-#include "BaseTab.hpp"
+#include "LogContainer.hpp"
 
 namespace view
 {
@@ -37,7 +37,7 @@ private: /*members*/
     Gtk::Box topContainer;
     Gtk::Box mainContainer;
     BookmarkView bookmarkView;
-    BaseTab fileView;
+    LogContainer fileView;
 
     // Helpers
     MenuBuilder menuBuilder;

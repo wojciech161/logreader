@@ -14,13 +14,13 @@ class BookmarkView;
 
 namespace view
 {
-class BaseTab : public Gtk::Notebook
+class LogContainer : public Gtk::Notebook
 {
 public:
-    BaseTab(BookmarkView&, bool);
-    virtual ~BaseTab();
+    LogContainer(BookmarkView&, bool);
+    virtual ~LogContainer();
 
-    BaseTab& getCurrentTab();
+    LogContainer& getCurrentTab();
     LogView& getLog();
     LogView& addTab(const std::string&, bool);
 
@@ -32,7 +32,7 @@ private:
     BookmarkView& bookmarkView;
     LogView baseLog;
     std::map<std::string, std::unique_ptr<TabLabel>> grepLabels;
-    std::map<std::string, std::unique_ptr<BaseTab>> grepTabs;
+    std::map<std::string, std::unique_ptr<LogContainer>> grepTabs;
     std::vector<std::string> grepNames;
     sigc::connection pageChangedConnection;
 };

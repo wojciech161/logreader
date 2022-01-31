@@ -40,11 +40,13 @@ bookmark mapped to fileId, not logId
 Scrolling to the middle of text view when finding/clicking on bookmark (currently scroll is at the end)
 ------------
 v. 0.4
-settings/bookmarks from configuration file, options menu
+Label with progress (when for example grepping...) Ready as default.
+settings/bookmarks/marks from configuration file, options menu
+automatic marks/bookmarks from settings when file/grep is opened
 projects (files and greps)
 load/save grep hierarchy
-Previous finds/greps reminder (list in dialog)
+Open file from app params, drag and drop
 ------------
 v. 0.5
-dialogs with progress (when grepping)
 multithreaded grep
+Previous finds/greps reminder (list in dialog)
