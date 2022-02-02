@@ -43,36 +43,15 @@ int LogView::getCurrentLine() const
     return iter.get_line();
 }
 
+model::BookmarkList& LogView::getBookmarks()
+{
+    return bookmarks;
+}
+
 void LogView::goToLine(int lineNum)
 {
     auto iter = buffer->get_iter_at_line(lineNum);
     buffer->place_cursor(iter);
     textView.scroll_to(iter);
-}
-
-void LogView::onBookmarkActivated(const Gtk::TreeModel::Path& path)
-{
-    int line = bookmarks.getBookmarkLine(path);
-    if (line > 0)
-    {
-        goToLine(line);
-    }
-}
-
-void LogView::deleteBookmark(const Gtk::TreeModel::iterator& iter)
-{
-    bookmarks.remove(iter);
-}
-
-void LogView::newBookmark(const std::string& bookmarkName)
-{
-    std::cout << "Add bookmark: " << bookmarkName << ", line: " << getCurrentLine() << std::endl;
-    bookmarks.add(getCurrentLine(), bookmarkName);
-}
-
-void LogView::updateBookmarksView()
-{
-    std::cout << "Update bookmarks view\n";
-    bookmarkView.update(this, bookmarks.getModel());
 }
 } // namespace view

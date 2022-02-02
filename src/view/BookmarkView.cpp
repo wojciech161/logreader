@@ -31,33 +31,35 @@ const model::Bookmark& BookmarkView::getColumns() const
 
 void BookmarkView::update(LogView* logView, const Glib::RefPtr<Gtk::ListStore>& model)
 {
-    currentTab = logView;
+    currentLog = logView;
     treeView.set_model(model);
 }
 
 void BookmarkView::onColumnActivated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn*)
 {
-    if (currentTab)
+    if (not currentLog) return;
+    int bookmarkLine = currentLog->getBookmarks().getBookmarkLine(path);
+    if (bookmarkLine > 0)
     {
-        currentTab->onBookmarkActivated(path);
+        currentLog->goToLine(bookmarkLine);
     }
 }
 
-void BookmarkView::release(LogView* tab)
+void BookmarkView::release(LogView* log)
 {
-    if (currentTab == tab)
+    if (currentLog == log)
     {
         treeView.unset_model();
-        currentTab = nullptr;
+        currentLog = nullptr;
     }
 }
 
 void BookmarkView::onBookmarkClose()
 {
-    if (currentTab)
+    if (currentLog)
     {
         const auto selectionIter = treeView.get_selection()->get_selected();
-        currentTab->deleteBookmark(selectionIter);
+        currentLog->getBookmarks().remove(selectionIter);
     }
 
 }

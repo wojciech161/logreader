@@ -22,12 +22,9 @@ public:
 
     const Glib::RefPtr<Gsv::Buffer>& getBuffer() const;
     Glib::RefPtr<Gsv::Buffer>& getBuffer();
+    model::BookmarkList& getBookmarks();
     int getCurrentLine() const;
     void goToLine(int);
-    void onBookmarkActivated(const Gtk::TreeModel::Path&);
-    void deleteBookmark(const Gtk::TreeModel::iterator&);
-    void newBookmark(const std::string&);
-    void updateBookmarksView();
 
 private:
     Gsv::View textView;

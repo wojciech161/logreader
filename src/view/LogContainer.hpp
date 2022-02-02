@@ -33,7 +33,6 @@ private:
     LogView baseLog;
     std::map<std::string, std::unique_ptr<TabLabel>> grepLabels;
     std::map<std::string, std::unique_ptr<LogContainer>> grepTabs;
-    std::vector<std::string> grepNames;
     sigc::connection pageChangedConnection;
 };
 } // namespaceview 

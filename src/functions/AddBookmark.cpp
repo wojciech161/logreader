@@ -10,6 +10,7 @@ AddBookmark::AddBookmark(const std::string& name)
 
 void AddBookmark::run(view::LogView& logView) const
 {
-    logView.newBookmark(bookmarkName);
+    logView.getBookmarks().add(
+        logView.getCurrentLine(), bookmarkName);
 }
 } // namespace functions

@@ -31,8 +31,7 @@ LogContainer& LogContainer::getCurrentTab() // may throw (expected behavior)!!!
     auto* currentTab = get_nth_page(get_current_page());
     if (currentTab)
     {
-        const auto& currentTabText = get_tab_label_text(*currentTab);
-        if ("Base" == currentTabText)
+        if ("Base" == get_tab_label_text(*currentTab))
         {
             return *this;
         }
@@ -53,9 +52,12 @@ LogView& LogContainer::addTab(const std::string& name, bool createBase)
     // }
     grepLabels.emplace(std::make_pair(name, std::make_unique<TabLabel>(name, [this, name](){closeTab(name);})));
     grepTabs.emplace(std::make_pair(name, std::make_unique<LogContainer>(bookmarkView, createBase)));
-    grepNames.push_back(name);
-    append_page(*grepTabs.at(name), *grepLabels.at(name));
+    int newTab = append_page(*grepTabs.at(name), *grepLabels.at(name));
     show_all_children();
+    if (newTab != -1)
+    {
+        set_current_page(newTab);
+    }
     return grepTabs[name]->getLog();
 }
 
@@ -64,12 +66,13 @@ void LogContainer::closeTab(const std::string& tabName)
     remove_page(*grepTabs.at(tabName));
     grepTabs.erase(tabName);
     grepLabels.erase(tabName);
-    grepNames.erase(std::remove(grepNames.begin(), grepNames.end(), tabName));
 }
 
-void LogContainer::onPageChanged(Gtk::Widget*, guint) try
+void LogContainer::onPageChanged(Gtk::Widget* currentTab, guint) try
 {
-    getCurrentTab().getLog().updateBookmarksView();
+    auto& logView = getCurrentTab().getLog();
+    const auto& bookmarks = logView.getBookmarks();
+    bookmarkView.update(&logView, bookmarks.getModel());
 } catch(const std::exception& e)
 {
     std::cout << "Unable to update bookmark: " << e.what() << std::endl;

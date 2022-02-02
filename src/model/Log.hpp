@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gtksourceviewmm/buffer.h>
+#include "BookmarkList.hpp"
 
 namespace model
 {
@@ -14,9 +15,10 @@ public:
     Log& operator=(const Log&) = delete;
     Log& operator=(Log&&) = delete;
 
+    int getId() const;
     Glib::RefPtr<Gsv::Buffer>& getBuffer();
     const Glib::RefPtr<Gsv::Buffer> getBuffer() const;
-    int getId() const;
+    int getCurrentLine() const;
 
 private:
     int id;

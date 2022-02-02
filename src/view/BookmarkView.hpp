@@ -36,6 +36,6 @@ private:
     Gtk::ScrolledWindow bookmarkWindow;
     Gtk::TreeView treeView;
     Gtk::Button closeBookmarkButton;
-    LogView* currentTab;
+    LogView* currentLog;
 };
 } // namespace view

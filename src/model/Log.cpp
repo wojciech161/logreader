@@ -30,4 +30,11 @@ const Glib::RefPtr<Gsv::Buffer> Log::getBuffer() const
 {
     return buffer;
 }
+
+int Log::getCurrentLine() const
+{
+    auto cursor = buffer->get_insert();
+    Gtk::TextIter iter = buffer->get_iter_at_mark(cursor);
+    return iter.get_line();
+}
 } // namespace model
