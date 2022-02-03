@@ -11,11 +11,12 @@ LogContainer::LogContainer(BookmarkView& bookmarkView, bool createBase)
 , baseLog{bookmarkView}
 {
     set_border_width(10);
+    set_scrollable(true);
     pageChangedConnection = 
         signal_switch_page().connect(sigc::mem_fun(*this, &LogContainer::onPageChanged));
     if (createBase)
     {
-        append_page(baseLog, "Base");
+        createTab(baseLog, "Base");
     }
     show_all_children();
 }
@@ -52,12 +53,8 @@ LogView& LogContainer::addTab(const std::string& name, bool createBase)
     // }
     grepLabels.emplace(std::make_pair(name, std::make_unique<TabLabel>(name, [this, name](){closeTab(name);})));
     grepTabs.emplace(std::make_pair(name, std::make_unique<LogContainer>(bookmarkView, createBase)));
-    int newTab = append_page(*grepTabs.at(name), *grepLabels.at(name));
+    createTab(*grepTabs.at(name), *grepLabels.at(name));
     show_all_children();
-    if (newTab != -1)
-    {
-        set_current_page(newTab);
-    }
     return grepTabs[name]->getLog();
 }
 

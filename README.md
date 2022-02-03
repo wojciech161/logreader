@@ -32,14 +32,17 @@ make
 - [ ] memory leaks inspection
 
 ###### v 0.2
-- [ ] error dialogs
-- [ ] open multiple files (merge)
+- [ ] bookmark mapped to fileId, not logId
+- [ ] Base dialog not to copy/paste all settings
+- [ ] Closing dialogs (like grep/find) on ESC - should work like cancel
+- [ ] Logger instead of stdout
 - [ ] Reopen file
 
 ###### v. 0.3
-- [ ] bookmark mapped to fileId, not logId
+- [ ] open multiple files (merge)
+- [ ] error dialogs
+- [ ] Operation::run should return status
 - [ ] Scrolling to the middle of text view when finding/clicking on bookmark (currently scroll is at the end)
-- [ ] Closing dialogs (like grep/find) on ESC - should work like cancel
 
 ###### v. 0.4
 - [ ] Label with progress (when for example grepping...) Ready as default.

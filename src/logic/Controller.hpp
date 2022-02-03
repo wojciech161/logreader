@@ -1,6 +1,6 @@
 #pragma once
 
-namespace controller
+namespace logic
 {
 class Controller
 {
@@ -15,4 +15,4 @@ public:
     void performBookmark();
     void performAbout();
 };
-} // namespace controller
+} // namespace logic

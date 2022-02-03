@@ -16,7 +16,7 @@ add_executable(
 
     app/application.cpp
 
-    controller/Controller.cpp
+    logic/Controller.cpp
 
     functions/AddBookmark.cpp
     functions/Find.cpp

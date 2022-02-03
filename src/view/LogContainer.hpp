@@ -27,6 +27,8 @@ public:
 private:
     void closeTab(const std::string&);
     void onPageChanged(Gtk::Widget*, guint);
+    template<typename LogTab, typename Label>
+    void createTab(LogTab& logTab, Label& label);
 
 private:
     BookmarkView& bookmarkView;
@@ -35,4 +37,15 @@ private:
     std::map<std::string, std::unique_ptr<LogContainer>> grepTabs;
     sigc::connection pageChangedConnection;
 };
+
+template<typename LogTab, typename Label>
+void LogContainer::createTab(LogTab& logTab, Label& label)
+{
+    int newTab = append_page(logTab, label);
+    if (newTab != -1)
+    {
+        set_current_page(newTab);
+        set_tab_reorderable(*get_nth_page(newTab));
+    }
+}
 } // namespaceview 
