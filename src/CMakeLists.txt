@@ -9,6 +9,7 @@ include_directories(
     view
     model
     functions
+    controllers
 )
 
 add_executable(
@@ -16,7 +17,10 @@ add_executable(
 
     app/application.cpp
 
-    logic/Controller.cpp
+    controllers/ApplicationController.cpp
+    controllers/BookmarkController.cpp
+    controllers/FunctionsController.cpp
+    controllers/TabController.cpp
 
     functions/AddBookmark.cpp
     functions/Find.cpp

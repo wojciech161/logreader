@@ -1,10 +1,8 @@
 #pragma once
 
-#include <gtkmm/application.h>
 #include <gtkmm/box.h>
 #include <gtkmm/builder.h>
 #include <gtkmm/window.h>
-#include <giomm/simpleactiongroup.h>
 
 #include "BookmarkView.hpp"
 #include "MenuBuilder.hpp"
@@ -15,32 +13,21 @@ namespace view
 class MainWindow : public Gtk::Window
 {
 public:
-    MainWindow(const Glib::RefPtr<Gtk::Application>&);
+    MainWindow();
     virtual ~MainWindow() = default;
 
-private: /*actions*/
-    void onActionFileOpen();
-    void onActionToolsGrep();
-    void onActionToolsFind();
-    void onActionToolsMark();
-    void onActionToolsBookmark();
-    void onActionHelpAbout();
+    BookmarkView& getBookmarkView();
+    LogContainer& getFileView();
+
+private:
+    void buildGui();
     void onResize(Gtk::Allocation& allocation);
 
-private: /*functions*/
-    void initActions();
-    void buildGui();
-    void setupKeyboardShortcuts(const Glib::RefPtr<Gtk::Application>& app);
-
-private: /*members*/
-    // GUI Elements
+private:
     Gtk::Box topContainer;
     Gtk::Box mainContainer;
     BookmarkView bookmarkView;
     LogContainer fileView;
-
-    // Helpers
     MenuBuilder menuBuilder;
-    Glib::RefPtr<Gio::SimpleActionGroup> refActionGroup;
 };
 } // namespace view

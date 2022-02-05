@@ -28,30 +28,32 @@ make
 - [ ] controller: new folder, all logic moved there
 - [ ] cmake refactor (introduce libs)
 - [ ] add icon (https://stackoverflow.com/questions/63697778/how-to-use-glib-compile-resources-with-cmake, Gio::Resources (gtkmm tutorial))
-- [ ] UTs for controller and model layer
-- [ ] memory leaks inspection
 
 ###### v 0.2
 - [ ] bookmark mapped to fileId, not logId
-- [ ] Base dialog not to copy/paste all settings
+- [ ] Base dialog class not to copy/paste all settings, to make controller testable, dialog factory and common interface for all dialogs
 - [ ] Closing dialogs (like grep/find) on ESC - should work like cancel
-- [ ] Logger instead of stdout
 - [ ] Reopen file
-
-###### v. 0.3
-- [ ] open multiple files (merge)
-- [ ] error dialogs
-- [ ] Operation::run should return status
+- [ ] Previous finds/greps reminder (list in dialog)
+- [ ] Previous search on F3
 - [ ] Scrolling to the middle of text view when finding/clicking on bookmark (currently scroll is at the end)
 
+###### v. 0.3
+- [ ] Open file from app params / drag and drop
+- [ ] Operation::run should return status
+- [ ] error dialogs
+- [ ] Search from beginning option in error dialog, when query is not found
+- [ ] UTs for controller and model layer
+- [ ] memory leaks inspection
+
 ###### v. 0.4
-- [ ] Label with progress (when for example grepping...) Ready as default.
 - [ ] settings/bookmarks/marks from configuration file, options menu
 - [ ] automatic marks/bookmarks from settings when file/grep is opened
-- [ ] projects (files and greps)
 - [ ] load/save grep hierarchy
-- [ ] Open file from app params, drag and drop
+- [ ] Logger instead of stdout
 
 ###### v. 0.5
+- [ ] Label with progress (when for example grepping...) Ready as default.
 - [ ] multithreaded grep
-- [ ] Previous finds/greps reminder (list in dialog)
+- [ ] projects (files and greps)
+- [ ] open multiple files (merge)
