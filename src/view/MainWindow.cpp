@@ -10,11 +10,19 @@ MainWindow::MainWindow()
 , bookmarkView{}
 , fileView{bookmarkView, false}
 {
+    std::cout << "MainWindow is constructed\n";
     set_title("LogReader version: 0.03");
     set_default_size(600, 600);
-    signal_size_allocate().connect(sigc::mem_fun(*this, &MainWindow::onResize));
+    resizeConnection = signal_size_allocate().connect(
+        sigc::mem_fun(*this, &MainWindow::onResize));
     buildGui();
     show_all_children();
+}
+
+MainWindow::~MainWindow()
+{
+    std::cout << "MainWindow is destructed\n";
+    resizeConnection.disconnect();
 }
 
 BookmarkView& MainWindow::getBookmarkView()

@@ -14,7 +14,7 @@ class MainWindow : public Gtk::Window
 {
 public:
     MainWindow();
-    virtual ~MainWindow() = default;
+    virtual ~MainWindow();
 
     BookmarkView& getBookmarkView();
     LogContainer& getFileView();
@@ -29,5 +29,6 @@ private:
     BookmarkView bookmarkView;
     LogContainer fileView;
     MenuBuilder menuBuilder;
+    sigc::connection resizeConnection;
 };
 } // namespace view

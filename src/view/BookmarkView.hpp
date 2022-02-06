@@ -20,15 +20,14 @@ class BookmarkView : public Gtk::Box
 {
 public:
     BookmarkView();
-    virtual ~BookmarkView() = default;
+    virtual ~BookmarkView();
 
     const model::Bookmark& getColumns() const;
     void update(LogView*, const Glib::RefPtr<Gtk::ListStore>&);
-    void release(LogView*);
-
-private:
-    void onColumnActivated(const Gtk::TreeModel::Path&, Gtk::TreeViewColumn*);
-    void onBookmarkClose();
+    Gtk::TreeModel::iterator getCurrentSelection();
+    void registerActions(
+        sigc::slot<void(const Gtk::TreeModel::Path&, Gtk::TreeViewColumn*)>,
+        sigc::slot<void()>);
 
 private:
     model::Bookmark columns;
@@ -36,6 +35,6 @@ private:
     Gtk::ScrolledWindow bookmarkWindow;
     Gtk::TreeView treeView;
     Gtk::Button closeBookmarkButton;
-    LogView* currentLog;
+    std::vector<sigc::connection> connections;
 };
 } // namespace view

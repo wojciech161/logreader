@@ -10,10 +10,11 @@ LogContainer::LogContainer(BookmarkView& bookmarkView, bool createBase)
 : bookmarkView{bookmarkView}
 , baseLog{bookmarkView}
 {
+    std::cout << "LogContainer is constructed\n";
     set_border_width(10);
     set_scrollable(true);
-    pageChangedConnection = 
-        signal_switch_page().connect(sigc::mem_fun(*this, &LogContainer::onPageChanged));
+    pageChangedConnection = signal_switch_page().connect(
+        sigc::mem_fun(*this, &LogContainer::onPageChanged));
     if (createBase)
     {
         createTab(baseLog, "Base");
@@ -23,7 +24,7 @@ LogContainer::LogContainer(BookmarkView& bookmarkView, bool createBase)
 
 LogContainer::~LogContainer()
 {
-    std::cout << "~LogContainer()\n";
+    std::cout << "LogContainer is destructed\n";
     pageChangedConnection.disconnect();
 }
 

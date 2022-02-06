@@ -29,7 +29,6 @@ public:
 private:
     Gsv::View textView;
     Glib::RefPtr<Gsv::Buffer> buffer;
-    BookmarkView& bookmarkView;
     model::BookmarkList bookmarks;
 };
 } // namespace view

@@ -8,9 +8,9 @@ namespace view
 {
 LogView::LogView(BookmarkView& bookmarkView)
 : buffer{Gsv::Buffer::create()}
-, bookmarkView{bookmarkView}
 , bookmarks{bookmarkView.getColumns()}
 {
+    std::cout << "LogView is constructed\n";
     set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     add(textView);
     textView.set_editable(false);
@@ -23,7 +23,7 @@ LogView::LogView(BookmarkView& bookmarkView)
 
 LogView::~LogView()
 {
-    bookmarkView.release(this);
+    std::cout << "LogView is destructed\n";
 }
 
 const Glib::RefPtr<Gsv::Buffer>& LogView::getBuffer() const

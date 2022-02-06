@@ -9,6 +9,7 @@ BookmarkView::BookmarkView()
 , boxTitle{"Bookmarks:"}
 , closeBookmarkButton{"Delete bookmark"}
 {
+    std::cout << "BookmarkView is constructed\n";
     pack_start(boxTitle, Gtk::PACK_SHRINK);
     pack_start(bookmarkWindow, Gtk::PACK_EXPAND_WIDGET);
     pack_end(closeBookmarkButton, Gtk::PACK_SHRINK);
@@ -18,10 +19,17 @@ BookmarkView::BookmarkView()
 
     treeView.append_column("Line", columns.lineNumber);
     treeView.append_column("Name", columns.bookmarkName);
-    treeView.signal_row_activated().connect(sigc::mem_fun(*this, &BookmarkView::onColumnActivated));
     treeView.columns_autosize();
+}
 
-    closeBookmarkButton.signal_clicked().connect(sigc::mem_fun(*this, &BookmarkView::onBookmarkClose));
+BookmarkView::~BookmarkView()
+{
+    std::cout << "BookmarkView is destructed\n";
+    for (auto& connection : connections)
+    {
+        connection.disconnect();
+    }
+    connections.clear();
 }
 
 const model::Bookmark& BookmarkView::getColumns() const
@@ -31,36 +39,19 @@ const model::Bookmark& BookmarkView::getColumns() const
 
 void BookmarkView::update(LogView* logView, const Glib::RefPtr<Gtk::ListStore>& model)
 {
-    currentLog = logView;
     treeView.set_model(model);
 }
 
-void BookmarkView::onColumnActivated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn*)
+Gtk::TreeModel::iterator BookmarkView::getCurrentSelection()
 {
-    if (not currentLog) return;
-    int bookmarkLine = currentLog->getBookmarks().getBookmarkLine(path);
-    if (bookmarkLine > 0)
-    {
-        currentLog->goToLine(bookmarkLine);
-    }
+    return treeView.get_selection()->get_selected();
 }
 
-void BookmarkView::release(LogView* log)
+void BookmarkView::registerActions(
+        sigc::slot<void(const Gtk::TreeModel::Path&, Gtk::TreeViewColumn*)> bookmarkActivatedAction,
+        sigc::slot<void()> bookmarkClosedAction)
 {
-    if (currentLog == log)
-    {
-        treeView.unset_model();
-        currentLog = nullptr;
-    }
-}
-
-void BookmarkView::onBookmarkClose()
-{
-    if (currentLog)
-    {
-        const auto selectionIter = treeView.get_selection()->get_selected();
-        currentLog->getBookmarks().remove(selectionIter);
-    }
-
+    connections.emplace_back(treeView.signal_row_activated().connect(bookmarkActivatedAction));
+    connections.emplace_back(closeBookmarkButton.signal_clicked().connect(bookmarkClosedAction));
 }
 } // namespaceview 
