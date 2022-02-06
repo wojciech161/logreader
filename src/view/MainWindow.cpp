@@ -4,11 +4,13 @@
 
 namespace view
 {
-MainWindow::MainWindow()
+MainWindow::MainWindow(
+    const controllers::BookmarkController& bookmarkController,
+    const controllers::TabController& tabController)
 : topContainer(Gtk::ORIENTATION_VERTICAL)
 , mainContainer(Gtk::ORIENTATION_HORIZONTAL)
-, bookmarkView{}
-, fileView{bookmarkView, false}
+, bookmarkView{bookmarkController}
+, fileView{bookmarkView, bookmarkController, false}
 {
     std::cout << "MainWindow is constructed\n";
     set_title("LogReader version: 0.03");

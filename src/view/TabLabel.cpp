@@ -7,9 +7,14 @@ TabLabel::TabLabel(const std::string& name, const std::function<void()>& closeFu
 , nameLabel{name}
 , closeButton{"X"}
 {
-    closeButton.signal_clicked().connect(closeFunction);
+    closeConnection = closeButton.signal_clicked().connect(closeFunction);
     pack_start(nameLabel, Gtk::PACK_SHRINK, 5);
     pack_start(closeButton, Gtk::PACK_SHRINK);
     show_all_children();
+}
+
+TabLabel::~TabLabel()
+{
+    closeConnection.disconnect();
 }
 } // namespace view

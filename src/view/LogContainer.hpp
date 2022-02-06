@@ -11,13 +11,18 @@ namespace view
 {
 class BookmarkView;
 } // namespace view
+namespace controllers
+{
+class BookmarkController;
+} // namespace controllers
+
 
 namespace view
 {
 class LogContainer : public Gtk::Notebook
 {
 public:
-    LogContainer(BookmarkView&, bool);
+    LogContainer(BookmarkView&, const controllers::BookmarkController&, bool);
     virtual ~LogContainer();
 
     LogContainer& getCurrentTab();
@@ -26,13 +31,13 @@ public:
 
 private:
     void closeTab(const std::string&);
-    void onPageChanged(Gtk::Widget*, guint);
     template<typename LogTab, typename Label>
     void createTab(LogTab& logTab, Label& label);
 
 private:
     BookmarkView& bookmarkView;
     LogView baseLog;
+    const controllers::BookmarkController& bookmarkController;
     std::map<std::string, std::unique_ptr<TabLabel>> grepLabels;
     std::map<std::string, std::unique_ptr<LogContainer>> grepTabs;
     sigc::connection pageChangedConnection;

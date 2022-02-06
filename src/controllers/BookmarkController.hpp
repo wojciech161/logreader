@@ -22,6 +22,7 @@ public:
     void addBookmark() const;
     void closeBookmark() const;
     void activateBookmark(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn*) const;
+    void updateView(Gtk::Widget*, guint) const;
 
 private:
     view::MainWindow& appWindow;

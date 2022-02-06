@@ -1,20 +1,25 @@
 #include "LogContainer.hpp"
 #include "LogView.hpp"
+#include "BookmarkController.hpp"
 #include "BookmarkView.hpp"
 
 #include <iostream>
 
 namespace view
 {
-LogContainer::LogContainer(BookmarkView& bookmarkView, bool createBase)
+LogContainer::LogContainer(
+    BookmarkView& bookmarkView,
+    const controllers::BookmarkController& bookmarkController,
+    bool createBase)
 : bookmarkView{bookmarkView}
 , baseLog{bookmarkView}
+, bookmarkController{bookmarkController}
 {
     std::cout << "LogContainer is constructed\n";
     set_border_width(10);
     set_scrollable(true);
     pageChangedConnection = signal_switch_page().connect(
-        sigc::mem_fun(*this, &LogContainer::onPageChanged));
+        sigc::mem_fun(bookmarkController, &controllers::BookmarkController::updateView));
     if (createBase)
     {
         createTab(baseLog, "Base");
@@ -53,7 +58,7 @@ LogView& LogContainer::addTab(const std::string& name, bool createBase)
     //     return;
     // }
     grepLabels.emplace(std::make_pair(name, std::make_unique<TabLabel>(name, [this, name](){closeTab(name);})));
-    grepTabs.emplace(std::make_pair(name, std::make_unique<LogContainer>(bookmarkView, createBase)));
+    grepTabs.emplace(std::make_pair(name, std::make_unique<LogContainer>(bookmarkView, bookmarkController, createBase)));
     createTab(*grepTabs.at(name), *grepLabels.at(name));
     show_all_children();
     return grepTabs[name]->getLog();
@@ -64,16 +69,6 @@ void LogContainer::closeTab(const std::string& tabName)
     remove_page(*grepTabs.at(tabName));
     grepTabs.erase(tabName);
     grepLabels.erase(tabName);
-}
-
-void LogContainer::onPageChanged(Gtk::Widget* currentTab, guint) try
-{
-    auto& logView = getCurrentTab().getLog();
-    const auto& bookmarks = logView.getBookmarks();
-    bookmarkView.update(&logView, bookmarks.getModel());
-} catch(const std::exception& e)
-{
-    std::cout << "Unable to update bookmark: " << e.what() << std::endl;
 }
 
 LogView& LogContainer::getLog()

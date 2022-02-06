@@ -26,9 +26,9 @@ private:
 private:
     Glib::RefPtr<Gtk::Application> application;
     Glib::RefPtr<Gio::SimpleActionGroup> refActionGroup;
-    view::MainWindow appWindow;
     TabController tabController;
     FunctionsController functionsController;
     BookmarkController bookmarkController;
+    view::MainWindow appWindow;
 };
 } // namespace controllers

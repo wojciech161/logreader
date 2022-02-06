@@ -8,12 +8,18 @@
 #include "MenuBuilder.hpp"
 #include "LogContainer.hpp"
 
+namespace controllers
+{
+class BookmarkController;
+class TabController;
+} // namespace controllers
+
 namespace view
 {
 class MainWindow : public Gtk::Window
 {
 public:
-    MainWindow();
+    MainWindow(const controllers::BookmarkController&, const controllers::TabController&);
     virtual ~MainWindow();
 
     BookmarkView& getBookmarkView();

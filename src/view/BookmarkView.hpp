@@ -13,21 +13,23 @@ namespace view
 {
 class LogView;
 } // namespace view
+namespace controllers
+{
+class BookmarkController;
+} // namespace controllers
+
 
 namespace view
 {
 class BookmarkView : public Gtk::Box
 {
 public:
-    BookmarkView();
+    BookmarkView(const controllers::BookmarkController&);
     virtual ~BookmarkView();
 
     const model::Bookmark& getColumns() const;
     void update(LogView*, const Glib::RefPtr<Gtk::ListStore>&);
     Gtk::TreeModel::iterator getCurrentSelection();
-    void registerActions(
-        sigc::slot<void(const Gtk::TreeModel::Path&, Gtk::TreeViewColumn*)>,
-        sigc::slot<void()>);
 
 private:
     model::Bookmark columns;

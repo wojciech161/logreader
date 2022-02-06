@@ -11,10 +11,10 @@ namespace controllers
 ApplicationController::ApplicationController(int argc, char** argv)
 : application{Gtk::Application::create(argc, argv, APP_NAME)}
 , refActionGroup{Gio::SimpleActionGroup::create()}
-, appWindow{}
 , tabController{appWindow}
 , functionsController{appWindow}
 , bookmarkController{appWindow}
+, appWindow{bookmarkController, tabController}
 {
     initActions();
     setupKeyboardShortcuts();

@@ -16,9 +16,6 @@ BookmarkController::BookmarkController(view::MainWindow& appWindow)
 , fileView{appWindow.getFileView()}
 {
     std::cout << "BookmarkController is constructed\n";
-    bookmarkView.registerActions(
-        sigc::mem_fun(*this, &BookmarkController::activateBookmark),
-        sigc::mem_fun(*this, &BookmarkController::closeBookmark));
 }
 
 BookmarkController::~BookmarkController()
@@ -59,4 +56,16 @@ void BookmarkController::activateBookmark(const Gtk::TreeModel::Path& path, Gtk:
 {
     std::cout << "Unable to activate bookmark: " << e.what() << std::endl;
 }
+
+void BookmarkController::updateView(Gtk::Widget*, guint) const try
+{
+    auto& currentLog = fileView.getCurrentTab().getLog();
+    const auto& currentBookmarks = currentLog.getBookmarks();
+    bookmarkView.update(&currentLog, currentBookmarks.getModel());
+}
+catch(const std::exception& e)
+{
+    std::cout << "Unable to update bookmark view: " << e.what() << std::endl;
+}
+
 } // namespace controllers
