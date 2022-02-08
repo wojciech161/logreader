@@ -9,7 +9,7 @@ namespace functions
 OpenSingle::OpenSingle(const std::string& path)
 : path{path} {}
 
-void OpenSingle::run(view::LogView& logView) const
+bool OpenSingle::run(view::LogView& logView) const
 {
     auto& buffer = logView.getBuffer();
     LogInserter inserter{buffer};
@@ -18,7 +18,7 @@ void OpenSingle::run(view::LogView& logView) const
     if (not file.is_open())
     {
         std::cout << "Could not open file!\n";
-        return;
+        return false;
     }
     std::string line;
     while (std::getline(file, line))
@@ -26,5 +26,6 @@ void OpenSingle::run(view::LogView& logView) const
         inserter.addLine(line + "\n");
     }
     buffer->place_cursor(buffer->get_iter_at_line(0));
+    return true;
 }
 } // namespace functions

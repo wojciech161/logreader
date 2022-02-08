@@ -22,6 +22,7 @@ add_executable(
     controllers/FunctionsController.cpp
     controllers/TabController.cpp
 
+    functions/ActivateBookmark.cpp
     functions/AddBookmark.cpp
     functions/Find.cpp
     functions/GetSelection.cpp

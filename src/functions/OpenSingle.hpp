@@ -11,7 +11,7 @@ public:
     OpenSingle(const std::string&);
     ~OpenSingle() = default;
 
-    void run(view::LogView&) const override;
+    bool run(view::LogView&) const override;
 
 private:
     std::string path;

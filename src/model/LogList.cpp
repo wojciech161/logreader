@@ -1,6 +1,7 @@
 #include "LogList.hpp"
 #include "Log.hpp"
 #include <exception>
+#include <iostream>
 
 namespace
 {
@@ -13,10 +14,21 @@ int generateId()
 
 namespace model
 {
-int LogList::append()
+LogList::LogList(const Bookmark& columns)
+: columns{columns}
+{
+    std::cout << "LogList is constructed\n";
+}
+
+LogList::~LogList()
+{
+    std::cout << "LogList is destructed\n";
+}
+
+int LogList::append(const std::string& name)
 {
     int id = generateId();
-    logs.emplace_back(std::make_unique<Log>(id));
+    logs.emplace_back(std::make_unique<Log>(id, name, columns));
     return id;
 }
 

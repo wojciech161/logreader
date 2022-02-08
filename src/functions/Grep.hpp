@@ -12,7 +12,7 @@ public:
     Grep(const view::LogView&, const std::string&, bool, bool, bool);
     ~Grep() = default;
 
-    void run(view::LogView&) const override;
+    bool run(view::LogView&) const override;
 
 private:
     const view::LogView& base;

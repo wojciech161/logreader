@@ -71,8 +71,12 @@ void FunctionsController::performFind() const try
     auto result = dialog.show();
     if (result.success)
     {
-        functions::Find operation{result.query, result.caseSensitive};
-        operation.run(fileView.getCurrentTab().getLog());
+        Gtk::TextIter iterAtFound;
+        functions::Find operation{result.query, result.caseSensitive, iterAtFound};
+        if (operation.run(fileView.getCurrentTab().getLog()))
+        {
+            fileView.getCurrentTab().getLog().scrollTo(iterAtFound);
+        }
     }
 } catch(const std::exception& e)
 {

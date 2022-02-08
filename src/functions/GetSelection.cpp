@@ -10,7 +10,7 @@ GetSelection::GetSelection(std::string& result, bool shouldUnselect)
 {
 }
 
-void GetSelection::run(view::LogView& logView) const
+bool GetSelection::run(view::LogView& logView) const
 {
     const auto& buffer{logView.getBuffer()};
     Gtk::TextIter selectionStart, selectionEnd;
@@ -21,6 +21,8 @@ void GetSelection::run(view::LogView& logView) const
             buffer->place_cursor(selectionEnd);
         }
         operationResult = buffer->get_text(selectionStart, selectionEnd);
+        return true;
     }
+    return false;
 }
 } // namespace functions

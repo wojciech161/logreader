@@ -11,7 +11,7 @@ public:
     AddBookmark(const std::string&);
     virtual ~AddBookmark() = default;
 
-    void run(view::LogView&) const override;
+    bool run(view::LogView&) const override;
 
 private:
     std::string bookmarkName;

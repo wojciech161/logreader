@@ -48,10 +48,8 @@ model::BookmarkList& LogView::getBookmarks()
     return bookmarks;
 }
 
-void LogView::goToLine(int lineNum)
+void LogView::scrollTo(Gtk::TextIter& iter)
 {
-    auto iter = buffer->get_iter_at_line(lineNum);
-    buffer->place_cursor(iter);
     textView.scroll_to(iter);
 }
 } // namespace view

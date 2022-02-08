@@ -1,5 +1,6 @@
 #pragma once
 
+#include <gtkmm/textiter.h>
 #include <string>
 #include "Operation.hpp"
 
@@ -8,13 +9,14 @@ namespace functions
 class Find : public Operation
 {
 public:
-    Find(const std::string&, bool);
+    Find(const std::string&, bool, Gtk::TextIter&);
     ~Find() = default;
 
-    void run(view::LogView&) const override;
+    bool run(view::LogView&) const override;
 
 private:
     std::string query;
     bool caseSensitive;
+    Gtk::TextIter& iterAtFound;
 };
 } // namespace functions

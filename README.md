@@ -30,7 +30,7 @@ make
 - [ ] add icon (https://stackoverflow.com/questions/63697778/how-to-use-glib-compile-resources-with-cmake, Gio::Resources (gtkmm tutorial))
 
 ###### v 0.2
-- [ ] bookmark mapped to fileId, not logId
+- [ ] bookmark mapped to fileId, not logId (map in controller <filename, BookmarkList>, filename in every model::Log)
 - [ ] Base dialog class not to copy/paste all settings, to make controller testable, dialog factory and common interface for all dialogs
 - [ ] Closing dialogs (like grep/find) on ESC - should work like cancel
 - [ ] Reopen file

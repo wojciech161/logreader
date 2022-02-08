@@ -11,7 +11,7 @@ public:
     Mark(const std::string&);
     ~Mark() = default;
 
-    void run(view::LogView&) const override;
+    bool run(view::LogView&) const override;
 
 private:
     std::string query;

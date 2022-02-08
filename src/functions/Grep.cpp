@@ -11,13 +11,13 @@ Grep::Grep(const view::LogView& base, const std::string& query, bool regexp, boo
 : base{base}
 , lineMatch{createMatcher(query, regexp, caseSensitive, inverted)} {}
 
-void Grep::run(view::LogView& logView) const
+bool Grep::run(view::LogView& logView) const
 {
     const auto& baseBuffer = base.getBuffer();
     auto& targetBuffer = logView.getBuffer();
     LogInserter inserter{targetBuffer};
-    if (not baseBuffer) return;
-    if (baseBuffer->get_line_count() < 2) return;
+    if (not baseBuffer) return false;
+    if (baseBuffer->get_line_count() < 2) return false;
     auto lineBegin = baseBuffer->get_iter_at_line(0);
     try
     {
@@ -37,5 +37,6 @@ void Grep::run(view::LogView& logView) const
         std::cout << "Error encountered during grep: " << e.what() << std::endl;
     }
     baseBuffer->place_cursor(baseBuffer->get_iter_at_line(0));
+    return true;
 }
 } // namespace functions

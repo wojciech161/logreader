@@ -4,6 +4,7 @@
 #include "MainWindow.hpp"
 #include "LogContainer.hpp"
 #include "BookmarkDialog.hpp"
+#include "ActivateBookmark.hpp"
 #include "AddBookmark.hpp"
 #include "BookmarkList.hpp"
 #include "BookmarkView.hpp"
@@ -51,7 +52,10 @@ void BookmarkController::activateBookmark(const Gtk::TreeModel::Path& path, Gtk:
 {
     auto& currentLog = fileView.getCurrentTab().getLog();
     auto& currentBookmarks = currentLog.getBookmarks();
-    currentLog.goToLine(currentBookmarks.getBookmarkLine(path));
+    Gtk::TextIter lineIter;
+    functions::ActivateBookmark operation{currentBookmarks.getBookmarkLine(path), lineIter};
+    operation.run(currentLog);
+    currentLog.scrollTo(lineIter);
 } catch(const std::exception& e)
 {
     std::cout << "Unable to activate bookmark: " << e.what() << std::endl;

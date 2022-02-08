@@ -30,7 +30,7 @@ Mark::Mark(const std::string& q)
         [](auto& c) {return std::tolower(c);});
 }
 
-void Mark::run(view::LogView& logView) const
+bool Mark::run(view::LogView& logView) const
 {
     const Glib::RefPtr<Gsv::Buffer>& buffer{logView.getBuffer()};
     auto currentTag = buffer->get_tag_table()->lookup(query);
@@ -53,5 +53,6 @@ void Mark::run(view::LogView& logView) const
         buffer->remove_tag(currentTag, buffer->begin(), buffer->end());
         buffer->get_tag_table()->remove(currentTag);
     }
+    return true;
 }
 } // namespace functions

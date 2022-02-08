@@ -24,7 +24,7 @@ public:
     Glib::RefPtr<Gsv::Buffer>& getBuffer();
     model::BookmarkList& getBookmarks();
     int getCurrentLine() const;
-    void goToLine(int);
+    void scrollTo(Gtk::TextIter&);
 
 private:
     Gsv::View textView;
