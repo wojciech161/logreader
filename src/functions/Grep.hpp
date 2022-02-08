@@ -13,6 +13,7 @@ public:
     ~Grep() = default;
 
     bool run(view::LogView&) const override;
+    bool run(model::Log&) const override;
 
 private:
     const view::LogView& base;

@@ -9,12 +9,14 @@ Log::Log(int id, const std::string& name, const Bookmark& columns)
 , buffer{Gsv::Buffer::create()}
 , bookmarks{columns}
 {
-    std::cout << "Log is constructed\n";
+    std::cout << "Log is constructed. Id: " 
+              << id << ", name: " << name << "\n";
 }
 
 Log::~Log()
 {
-    std::cout << "Log is destructed\n";
+    std::cout << "Log is destructed. Id: " 
+              << id << ", name: " << name << "\n";
     buffer.reset();
 }
 

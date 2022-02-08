@@ -13,6 +13,7 @@ public:
     virtual ~ActivateBookmark() = default;
 
     bool run(view::LogView&) const override;
+    bool run(model::Log&) const override;
 
 private:
     int lineNumber;

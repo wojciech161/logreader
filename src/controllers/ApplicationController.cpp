@@ -15,6 +15,7 @@ ApplicationController::ApplicationController(int argc, char** argv)
 , functionsController{appWindow}
 , bookmarkController{appWindow}
 , appWindow{bookmarkController, tabController}
+, openedLogs{appWindow.getBookmarkView().getColumns()}
 {
     initActions();
     setupKeyboardShortcuts();

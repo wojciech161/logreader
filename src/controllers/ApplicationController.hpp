@@ -6,6 +6,7 @@
 #include "FunctionsController.hpp"
 #include "TabController.hpp"
 #include "BookmarkController.hpp"
+#include "LogList.hpp"
 
 namespace controllers
 {
@@ -30,5 +31,6 @@ private:
     FunctionsController functionsController;
     BookmarkController bookmarkController;
     view::MainWindow appWindow;
+    model::LogList openedLogs;
 };
 } // namespace controllers

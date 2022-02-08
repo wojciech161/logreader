@@ -12,6 +12,7 @@ public:
     ~Mark() = default;
 
     bool run(view::LogView&) const override;
+    bool run(model::Log&) const override;
 
 private:
     std::string query;
