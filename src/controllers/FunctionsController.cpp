@@ -42,12 +42,13 @@ void FunctionsController::performGrep() const try
     {
         functions::Grep operation{currentLog, result.query, result.regexp, result.caseSensitive, result.inverted};
         auto newLog{std::make_unique<model::Log>(functions::createName(
-            result.query, result.regexp, result.caseSensitive, result.inverted), columns)};
+            result.query, result.regexp, result.caseSensitive, result.inverted), columns, currentLog.getId())};
         if (operation.run(*newLog))
         {
             int newLogId{newLog->getId()};
             openedLogs.append(std::move(newLog));
             currentTab.addTab(openedLogs.get(newLogId));
+            currentLog.addChild(newLogId);
         }
     }
 } catch(const std::exception& e)

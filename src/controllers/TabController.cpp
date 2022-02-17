@@ -10,6 +10,11 @@
 #include "Log.hpp"
 #include "BookmarkView.hpp"
 
+namespace
+{
+constexpr int NO_PARENT{-1};
+} // namespace
+
 namespace controllers
 {
 TabController::TabController(view::MainWindow& appWindow, model::LogList& openedLogs)
@@ -32,7 +37,7 @@ void TabController::openSingleFile() const try
     std::string path = fileChooser.getFilepath();
     if (not path.empty())
     {
-        auto newLog{std::make_unique<model::Log>(functions::createName(path), columns)};
+        auto newLog{std::make_unique<model::Log>(functions::createName(path), columns, NO_PARENT)};
         functions::OpenSingle operation{path};
         if (operation.run(*newLog))
         {
@@ -48,6 +53,11 @@ void TabController::openSingleFile() const try
 
 void TabController::removeLog(int id) const
 {
+    int parentId = openedLogs.get(id).getParentId();
+    if (parentId != NO_PARENT) try
+    {
+        openedLogs.get(parentId).removeChild(id);
+    } catch (std::exception&) {}
     openedLogs.remove(id);
 }
 } // namespace controllers

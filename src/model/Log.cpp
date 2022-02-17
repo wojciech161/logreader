@@ -12,9 +12,10 @@ int generateId()
 
 namespace model
 {
-Log::Log(const std::string& name, const Bookmark& columns)
+Log::Log(const std::string& name, const Bookmark& columns, int parentId)
 : id{generateId()}
 , name{name}
+, parentId{parentId}
 , buffer{Gsv::Buffer::create()}
 , bookmarks{columns}
 {
@@ -57,5 +58,21 @@ model::BookmarkList& Log::getBookmarks()
 const model::BookmarkList& Log::getBookmarks() const
 {
     return bookmarks;
+}
+
+void Log::addChild(int childId)
+{
+    std::cout << "Log (id: " << id << ") add child: " << childId << std::endl;
+    children.push_back(childId);
+}
+void Log::removeChild(int childId)
+{
+    std::cout << "Log (id: " << id << ") remove child: " << childId << std::endl;
+    children.erase(std::remove(children.begin(), children.end(), childId), children.end());
+}
+
+int Log::getParentId() const
+{
+    return parentId;
 }
 } // namespace model
