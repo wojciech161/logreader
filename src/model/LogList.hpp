@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <string>
 #include <vector>
 
 namespace model
@@ -9,7 +8,6 @@ namespace model
 class Bookmark;
 class Log;
 } // namespace model
-
 
 namespace model
 {
@@ -23,8 +21,9 @@ public:
     LogList& operator=(const LogList&) = delete;
     LogList& operator=(LogList&&) = delete;
 
-    int append(const std::string&);
+    void append(std::unique_ptr<Log>&&);
     Log& get(int);
+    const Log& get(int) const;
     void remove(int);
 
 private:

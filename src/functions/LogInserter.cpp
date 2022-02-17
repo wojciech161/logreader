@@ -7,7 +7,6 @@ const Gdk::RGBA RED{"#FF0000"};
 const Gdk::RGBA BLUE{"#0000FF"};
 } // namespace
 
-
 namespace functions
 {
 LogInserter::LogInserter(Glib::RefPtr<Gsv::Buffer>& buffer)

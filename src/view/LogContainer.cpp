@@ -1,29 +1,41 @@
 #include "LogContainer.hpp"
 #include "LogView.hpp"
 #include "BookmarkController.hpp"
-#include "BookmarkView.hpp"
+#include "Log.hpp"
 
 #include <iostream>
 
 namespace view
 {
 LogContainer::LogContainer(
-    BookmarkView& bookmarkView,
     const controllers::BookmarkController& bookmarkController,
-    bool createBase)
-: bookmarkView{bookmarkView}
-, baseLog{bookmarkView}
+    const controllers::TabController& tabController)
+: baseLog{tabController}
 , bookmarkController{bookmarkController}
+, tabController{tabController}
 {
-    std::cout << "LogContainer is constructed\n";
+    std::cout << "Top LogContainer is constructed\n";
     set_border_width(10);
     set_scrollable(true);
     pageChangedConnection = signal_switch_page().connect(
         sigc::mem_fun(bookmarkController, &controllers::BookmarkController::updateView));
-    if (createBase)
-    {
-        createTab(baseLog, "Base");
-    }
+    show_all_children();
+}
+
+LogContainer::LogContainer(
+    const model::Log& log,
+    const controllers::BookmarkController& bookmarkController,
+    const controllers::TabController& tabController)
+: baseLog{log, tabController}
+, bookmarkController{bookmarkController}
+, tabController{tabController}
+{
+    std::cout << "LogContainer is constructed for log: " << log.getId() << "\n";
+    set_border_width(10);
+    set_scrollable(true);
+    pageChangedConnection = signal_switch_page().connect(
+        sigc::mem_fun(bookmarkController, &controllers::BookmarkController::updateView));
+    createTab(baseLog, "Base");
     show_all_children();
 }
 
@@ -50,18 +62,15 @@ LogContainer& LogContainer::getCurrentTab() // may throw (expected behavior)!!!
     }
 }
 
-LogView& LogContainer::addTab(const std::string& name, bool createBase)
+LogView& LogContainer::addTab(const model::Log& log)
 {
-    // if (grepTabs.find(name) != grepTabs.end()) // Should be moved to model
-    // {
-    //     std::cout << "Grep already exists. Skipping.\n";
-    //     return;
-    // }
-    grepLabels.emplace(std::make_pair(name, std::make_unique<TabLabel>(name, [this, name](){closeTab(name);})));
-    grepTabs.emplace(std::make_pair(name, std::make_unique<LogContainer>(bookmarkView, bookmarkController, createBase)));
-    createTab(*grepTabs.at(name), *grepLabels.at(name));
+    grepLabels.emplace(std::make_pair(log.getName(), std::make_unique<TabLabel>(
+        log.getName(), [this, name=log.getName()](){closeTab(name);})));
+    grepTabs.emplace(std::make_pair(log.getName(), std::make_unique<LogContainer>(
+        log, bookmarkController, tabController)));
+    createTab(*grepTabs.at(log.getName()), *grepLabels.at(log.getName()));
     show_all_children();
-    return grepTabs[name]->getLog();
+    return grepTabs[log.getName()]->getLog();
 }
 
 void LogContainer::closeTab(const std::string& tabName)

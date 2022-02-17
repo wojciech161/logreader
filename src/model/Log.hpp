@@ -9,7 +9,7 @@ namespace model
 class Log
 {
 public:
-    Log(int, const std::string&, const Bookmark&);
+    Log(const std::string&, const Bookmark&);
     ~Log();
     Log(const Log&) = delete;
     Log(Log&&) = delete;
@@ -21,7 +21,7 @@ public:
     Glib::RefPtr<Gsv::Buffer>& getBuffer();
     const Glib::RefPtr<Gsv::Buffer> getBuffer() const;
     model::BookmarkList& getBookmarks();
-    int getCurrentLine() const;
+    const model::BookmarkList& getBookmarks() const;
 
 private:
     int id;

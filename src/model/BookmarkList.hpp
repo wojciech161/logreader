@@ -1,7 +1,11 @@
 #pragma once
 
 #include <gtkmm/liststore.h>
-#include "Bookmark.hpp"
+
+namespace model
+{
+class Bookmark;
+} // namespace model
 
 namespace model
 {

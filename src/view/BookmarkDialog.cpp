@@ -1,4 +1,5 @@
 #include "BookmarkDialog.hpp"
+#include "MainWindow.hpp"
 #include <iostream> // temporary
 
 namespace view

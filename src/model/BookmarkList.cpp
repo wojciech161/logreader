@@ -1,4 +1,5 @@
 #include "BookmarkList.hpp"
+#include "Bookmark.hpp"
 
 namespace model
 {

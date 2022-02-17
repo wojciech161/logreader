@@ -9,15 +9,10 @@
 #include <gtkmm/treeview.h>
 #include "Bookmark.hpp"
 
-namespace view
-{
-class LogView;
-} // namespace view
 namespace controllers
 {
 class BookmarkController;
 } // namespace controllers
-
 
 namespace view
 {
@@ -28,7 +23,7 @@ public:
     virtual ~BookmarkView();
 
     const model::Bookmark& getColumns() const;
-    void update(LogView*, const Glib::RefPtr<Gtk::ListStore>&);
+    void update(const Glib::RefPtr<Gtk::ListStore>&);
     Gtk::TreeModel::iterator getCurrentSelection();
 
 private:

@@ -12,7 +12,6 @@ public:
     Find(const std::string&, bool, Gtk::TextIter&);
     ~Find() = default;
 
-    bool run(view::LogView&) const override;
     bool run(model::Log&) const override;
 
 private:

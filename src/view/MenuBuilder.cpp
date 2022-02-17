@@ -1,5 +1,5 @@
 #include "MenuBuilder.hpp"
-#include "MainWindow.hpp"
+#include <giomm/menu.h>
 
 namespace
 {

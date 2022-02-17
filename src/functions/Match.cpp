@@ -45,7 +45,7 @@ std::function<bool(const std::string&)> createMatcher(const std::string& query, 
             };
         }
     }
-    else // regexp
+    else // regex
     {
         auto regexFlags = caseSensitive ?
             std::regex_constants::ECMAScript :

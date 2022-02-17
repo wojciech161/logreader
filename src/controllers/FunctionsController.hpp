@@ -7,13 +7,20 @@ namespace view
 class LogContainer;
 class MainWindow;
 } // namespace view
+namespace model
+{
+class Bookmark;
+class LogList;
+class Log;
+} // namespace model
+
 
 namespace controllers
 {
 class FunctionsController
 {
 public:
-    FunctionsController(view::MainWindow&);
+    FunctionsController(view::MainWindow&, model::LogList&);
     ~FunctionsController();
 
     void performGrep() const;
@@ -22,9 +29,12 @@ public:
 
 private:
     std::string getSelection(bool souldUnmark = true) const;
+    model::Log& getCurrentLog() const;
 
 private:
     view::MainWindow& appWindow;
     view::LogContainer& fileView;
+    model::LogList& openedLogs;
+    const model::Bookmark& columns;
 };
 } // namespace controllers

@@ -11,9 +11,9 @@ namespace controllers
 ApplicationController::ApplicationController(int argc, char** argv)
 : application{Gtk::Application::create(argc, argv, APP_NAME)}
 , refActionGroup{Gio::SimpleActionGroup::create()}
-, tabController{appWindow}
-, functionsController{appWindow}
-, bookmarkController{appWindow}
+, tabController{appWindow, openedLogs}
+, functionsController{appWindow, openedLogs}
+, bookmarkController{appWindow, openedLogs}
 , appWindow{bookmarkController, tabController}
 , openedLogs{appWindow.getBookmarkView().getColumns()}
 {

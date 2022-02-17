@@ -22,10 +22,10 @@ make
 
 ## TODO/Ideas/Future plans:
 ###### v. 0.1
-- [ ] refactor (separate layers)
-- [ ] model: Log, LogList, Bookmark, BookmarkList, model as logId, fileId, ids in view(?)
+- [x] refactor (separate layers)
+- [x] model: Log, LogList, Bookmark, BookmarkList, model as logId, fileId, ids in view(?)
+- [x] controller: new folder, all logic moved there
 - [ ] Add check in model/controller if the same file is not opened/if the same grep is not present
-- [ ] controller: new folder, all logic moved there
 - [ ] cmake refactor (introduce libs)
 - [ ] add icon (https://stackoverflow.com/questions/63697778/how-to-use-glib-compile-resources-with-cmake, Gio::Resources (gtkmm tutorial))
 

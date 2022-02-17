@@ -1,4 +1,5 @@
 #include "GrepDialog.hpp"
+#include "MainWindow.hpp"
 #include <iostream> // temporary
 
 namespace view

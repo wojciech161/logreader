@@ -1,7 +1,6 @@
 #pragma once
 
 #include <gtkmm/box.h>
-#include <gtkmm/builder.h>
 #include <gtkmm/window.h>
 
 #include "BookmarkView.hpp"

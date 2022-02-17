@@ -1,34 +1,32 @@
 #pragma once
 
-#include <string>
-
 #include <gtkmm/scrolledwindow.h>
-#include <gtksourceviewmm/buffer.h>
 #include <gtksourceviewmm/view.h>
-#include "BookmarkList.hpp"
 
-namespace view
+namespace controllers
 {
-class BookmarkView;
-} // namespace view
+class TabController;
+} // namespace controllers
+namespace model
+{
+class Log;
+} // namespace model
 
 namespace view
 {
 class LogView : public Gtk::ScrolledWindow
 {
 public:
-    LogView(BookmarkView&);
+    LogView(const controllers::TabController&);
+    LogView(const model::Log&, const controllers::TabController&);
     virtual ~LogView();
 
-    const Glib::RefPtr<Gsv::Buffer>& getBuffer() const;
-    Glib::RefPtr<Gsv::Buffer>& getBuffer();
-    model::BookmarkList& getBookmarks();
-    int getCurrentLine() const;
     void scrollTo(Gtk::TextIter&);
+    int getModelId() const;
 
 private:
     Gsv::View textView;
-    Glib::RefPtr<Gsv::Buffer> buffer;
-    model::BookmarkList bookmarks;
+    int modelId;
+    const controllers::TabController& tabController;
 };
 } // namespace view

@@ -3,7 +3,12 @@
 #include <gtkmm/dialog.h>
 #include <gtkmm/label.h>
 #include <gtkmm/searchentry.h>
-#include "MainWindow.hpp"
+
+namespace view
+{
+class MainWindow;
+} // namespace view
+
 
 namespace view
 {

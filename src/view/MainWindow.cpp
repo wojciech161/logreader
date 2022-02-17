@@ -10,10 +10,10 @@ MainWindow::MainWindow(
 : topContainer(Gtk::ORIENTATION_VERTICAL)
 , mainContainer(Gtk::ORIENTATION_HORIZONTAL)
 , bookmarkView{bookmarkController}
-, fileView{bookmarkView, bookmarkController, false}
+, fileView{bookmarkController, tabController}
 {
     std::cout << "MainWindow is constructed\n";
-    set_title("LogReader version: 0.03");
+    set_title("LogReader version: 0.04");
     set_default_size(600, 600);
     resizeConnection = signal_size_allocate().connect(
         sigc::mem_fun(*this, &MainWindow::onResize));

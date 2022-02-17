@@ -11,12 +11,18 @@
 #include "Find.hpp"
 #include "MarkDialog.hpp"
 #include "Mark.hpp"
+#include "BookmarkView.hpp"
+#include "LogList.hpp"
+#include "Log.hpp"
 
 namespace controllers
 {
-FunctionsController::FunctionsController(view::MainWindow& appWindow)
+FunctionsController::FunctionsController(
+    view::MainWindow& appWindow, model::LogList& openedLogs)
 : appWindow{appWindow}
 , fileView{appWindow.getFileView()}
+, openedLogs{openedLogs}
+, columns{appWindow.getBookmarkView().getColumns()}
 {
     std::cout << "FunctionsController is constructed\n";
 }
@@ -29,13 +35,20 @@ FunctionsController::~FunctionsController()
 void FunctionsController::performGrep() const try
 {
     view::LogContainer& currentTab{fileView.getCurrentTab()};
+    model::Log& currentLog = getCurrentLog();
     view::GrepDialog dialog(appWindow, getSelection());
     auto result = dialog.show();
     if (result.success)
     {
-        functions::Grep operation{currentTab.getLog(), result.query, result.regexp, result.caseSensitive, result.inverted};
-        auto& newTab = currentTab.addTab(functions::createName(result.query, result.regexp, result.caseSensitive, result.inverted), true);
-        operation.run(newTab);
+        functions::Grep operation{currentLog, result.query, result.regexp, result.caseSensitive, result.inverted};
+        auto newLog{std::make_unique<model::Log>(functions::createName(
+            result.query, result.regexp, result.caseSensitive, result.inverted), columns)};
+        if (operation.run(*newLog))
+        {
+            int newLogId{newLog->getId()};
+            openedLogs.append(std::move(newLog));
+            currentTab.addTab(openedLogs.get(newLogId));
+        }
     }
 } catch(const std::exception& e)
 {
@@ -44,6 +57,8 @@ void FunctionsController::performGrep() const try
 
 void FunctionsController::performMark() const try
 {
+    view::LogContainer& currentTab{fileView.getCurrentTab()};
+    model::Log& currentLog = getCurrentLog();
     const auto selectedText = getSelection(false);
     if (selectedText.empty())
     {
@@ -52,13 +67,13 @@ void FunctionsController::performMark() const try
         if (result.success)
         {
             functions::Mark operation{result.query};
-            operation.run(fileView.getCurrentTab().getLog());
+            operation.run(currentLog);
         }
     }
     else
     {
         functions::Mark operation{selectedText};
-        operation.run(fileView.getCurrentTab().getLog());
+        operation.run(currentLog);
     }
 } catch(const std::exception& e)
 {
@@ -67,15 +82,17 @@ void FunctionsController::performMark() const try
 
 void FunctionsController::performFind() const try
 {
+    model::Log& currentLog = getCurrentLog();
+    view::LogView& currentLogView = fileView.getCurrentTab().getLog();
     view::FindDialog dialog(appWindow, getSelection());
     auto result = dialog.show();
     if (result.success)
     {
         Gtk::TextIter iterAtFound;
         functions::Find operation{result.query, result.caseSensitive, iterAtFound};
-        if (operation.run(fileView.getCurrentTab().getLog()))
+        if (operation.run(currentLog))
         {
-            fileView.getCurrentTab().getLog().scrollTo(iterAtFound);
+            currentLogView.scrollTo(iterAtFound);
         }
     }
 } catch(const std::exception& e)
@@ -86,8 +103,9 @@ void FunctionsController::performFind() const try
 std::string FunctionsController::getSelection(bool shouldUnmark) const try
 {
     std::string result;
+    model::Log& currentLog = getCurrentLog();
     functions::GetSelection operation{result, shouldUnmark};
-    operation.run(fileView.getCurrentTab().getLog());
+    operation.run(currentLog);
     return result;
 }
 catch(const std::exception& e)
@@ -95,4 +113,13 @@ catch(const std::exception& e)
     return "";
 }
 
+model::Log& FunctionsController::getCurrentLog() const
+{
+    int currentLogId = fileView.getCurrentTab().getLog().getModelId();
+    if (currentLogId == -1)
+    {
+        throw std::runtime_error("Can't get current log!");
+    }
+    return openedLogs.get(currentLogId);
+}
 } // namespace controllers

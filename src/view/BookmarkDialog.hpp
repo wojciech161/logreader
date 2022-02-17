@@ -3,7 +3,10 @@
 #include <gtkmm/dialog.h>
 #include <gtkmm/entry.h>
 
-#include "MainWindow.hpp"
+namespace view
+{
+class MainWindow;
+} // namespace view
 
 namespace view
 {

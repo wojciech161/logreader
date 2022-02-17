@@ -1,10 +1,19 @@
 #include "Log.hpp"
 #include <iostream>
 
+namespace
+{
+int generateId()
+{
+    static int id{0};
+    return id++;
+}
+} // namespace
+
 namespace model
 {
-Log::Log(int id, const std::string& name, const Bookmark& columns)
-: id{id}
+Log::Log(const std::string& name, const Bookmark& columns)
+: id{generateId()}
 , name{name}
 , buffer{Gsv::Buffer::create()}
 , bookmarks{columns}
@@ -45,10 +54,8 @@ model::BookmarkList& Log::getBookmarks()
     return bookmarks;
 }
 
-int Log::getCurrentLine() const
+const model::BookmarkList& Log::getBookmarks() const
 {
-    auto cursor = buffer->get_insert();
-    Gtk::TextIter iter = buffer->get_iter_at_mark(cursor);
-    return iter.get_line();
+    return bookmarks;
 }
 } // namespace model

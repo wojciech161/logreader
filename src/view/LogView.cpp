@@ -1,14 +1,22 @@
 #include "LogView.hpp"
-#include <gtksourceviewmm/buffer.h>
-#include "BookmarkView.hpp"
+#include "Log.hpp"
+#include "TabController.hpp"
 
 #include <iostream> // temporary
 
 namespace view
 {
-LogView::LogView(BookmarkView& bookmarkView)
-: buffer{Gsv::Buffer::create()}
-, bookmarks{bookmarkView.getColumns()}
+LogView::LogView(const controllers::TabController& tabController)
+: modelId{-1}
+, tabController{tabController}
+{
+    std::cout << "LogView is constructed, id: " << modelId << "\n";
+    set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+}
+
+LogView::LogView(const model::Log& log, const controllers::TabController& tabController)
+: modelId{log.getId()}
+, tabController{tabController}
 {
     std::cout << "LogView is constructed\n";
     set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
@@ -17,39 +25,23 @@ LogView::LogView(BookmarkView& bookmarkView)
     textView.set_cursor_visible(true);
     textView.set_show_line_numbers(true);
     textView.set_highlight_current_line(true);
-    textView.set_source_buffer(buffer);
+    textView.set_source_buffer(log.getBuffer());
     textView.show();
 }
 
 LogView::~LogView()
 {
     std::cout << "LogView is destructed\n";
-}
-
-const Glib::RefPtr<Gsv::Buffer>& LogView::getBuffer() const
-{
-    return buffer;
-}
-
-Glib::RefPtr<Gsv::Buffer>& LogView::getBuffer()
-{
-    return buffer;
-}
-
-int LogView::getCurrentLine() const
-{
-    auto cursor = buffer->get_insert();
-    Gtk::TextIter iter = buffer->get_iter_at_mark(cursor);
-    return iter.get_line();
-}
-
-model::BookmarkList& LogView::getBookmarks()
-{
-    return bookmarks;
+    if (modelId != -1) tabController.removeLog(modelId);
 }
 
 void LogView::scrollTo(Gtk::TextIter& iter)
 {
     textView.scroll_to(iter);
+}
+
+int LogView::getModelId() const
+{
+    return modelId;
 }
 } // namespace view

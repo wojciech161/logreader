@@ -3,7 +3,7 @@ project(LogReader)
 cmake_minimum_required(VERSION 3.16)
 
 set (CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_FLAGS "-O3 -Wno-cpp -Wno-deprecated-declarations -no-pie")
+set(CMAKE_CXX_FLAGS "-O3 -Wno-cpp -Wno-deprecated-declarations -no-pie -ggdb")
 # set(CMAKE_CXX_FLAGS "-O3 -Wall -Wextra -Werror -pedantic")
 
 find_package(PkgConfig)

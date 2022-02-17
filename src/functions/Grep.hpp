@@ -9,14 +9,13 @@ namespace functions
 class Grep : public Operation
 {
 public:
-    Grep(const view::LogView&, const std::string&, bool, bool, bool);
+    Grep(const model::Log&, const std::string&, bool, bool, bool);
     ~Grep() = default;
 
-    bool run(view::LogView&) const override;
     bool run(model::Log&) const override;
 
 private:
-    const view::LogView& base;
+    const model::Log& base;
     std::function<bool(const std::string&)> lineMatch;
 };
 } // namespace functions

@@ -6,12 +6,17 @@
 #include "FileChooser.hpp"
 #include "OpenSingle.hpp"
 #include "NameCreator.hpp"
+#include "LogList.hpp"
+#include "Log.hpp"
+#include "BookmarkView.hpp"
 
 namespace controllers
 {
-TabController::TabController(view::MainWindow& appWindow)
+TabController::TabController(view::MainWindow& appWindow, model::LogList& openedLogs)
 : appWindow{appWindow}
 , logTabs{appWindow.getFileView()}
+, openedLogs{openedLogs}
+, columns{appWindow.getBookmarkView().getColumns()}
 {
     std::cout << "TabController is constructed\n";
 }
@@ -27,12 +32,22 @@ void TabController::openSingleFile() const try
     std::string path = fileChooser.getFilepath();
     if (not path.empty())
     {
+        auto newLog{std::make_unique<model::Log>(functions::createName(path), columns)};
         functions::OpenSingle operation{path};
-        auto& newTab = logTabs.addTab(functions::createName(path), true);
-        operation.run(newTab);
+        if (operation.run(*newLog))
+        {
+            int newLogId{newLog->getId()};
+            openedLogs.append(std::move(newLog));
+            logTabs.addTab(openedLogs.get(newLogId));
+        }
     }
 } catch(const std::exception& e)
 {
     std::cout << "Open single file failed: " << e.what() << std::endl;
+}
+
+void TabController::removeLog(int id) const
+{
+    openedLogs.remove(id);
 }
 } // namespace controllers

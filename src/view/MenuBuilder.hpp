@@ -6,11 +6,6 @@
 
 namespace view
 {
-class MainWindow;
-} // namespace view
-
-namespace view
-{
 class MenuBuilder
 {
 public:

@@ -1,6 +1,5 @@
 #include "BookmarkView.hpp"
 #include "BookmarkController.hpp"
-#include "LogView.hpp"
 #include <iostream>
 
 namespace view
@@ -43,7 +42,7 @@ const model::Bookmark& BookmarkView::getColumns() const
     return columns;
 }
 
-void BookmarkView::update(LogView* logView, const Glib::RefPtr<Gtk::ListStore>& model)
+void BookmarkView::update(const Glib::RefPtr<Gtk::ListStore>& model)
 {
     treeView.set_model(model);
 }

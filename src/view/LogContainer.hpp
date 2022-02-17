@@ -7,14 +7,15 @@
 #include "TabLabel.hpp"
 #include "BookmarkList.hpp"
 
-namespace view
-{
-class BookmarkView;
-} // namespace view
 namespace controllers
 {
 class BookmarkController;
+class TabController;
 } // namespace controllers
+namespace model
+{
+class Log;
+} // namespace model
 
 
 namespace view
@@ -22,12 +23,13 @@ namespace view
 class LogContainer : public Gtk::Notebook
 {
 public:
-    LogContainer(BookmarkView&, const controllers::BookmarkController&, bool);
+    LogContainer(const controllers::BookmarkController&, const controllers::TabController&);
+    LogContainer(const model::Log&, const controllers::BookmarkController&, const controllers::TabController&);
     virtual ~LogContainer();
 
     LogContainer& getCurrentTab();
     LogView& getLog();
-    LogView& addTab(const std::string&, bool);
+    LogView& addTab(const model::Log&);
 
 private:
     void closeTab(const std::string&);
@@ -35,9 +37,9 @@ private:
     void createTab(LogTab& logTab, Label& label);
 
 private:
-    BookmarkView& bookmarkView;
     LogView baseLog;
     const controllers::BookmarkController& bookmarkController;
+    const controllers::TabController& tabController;
     std::map<std::string, std::unique_ptr<TabLabel>> grepLabels;
     std::map<std::string, std::unique_ptr<LogContainer>> grepTabs;
     sigc::connection pageChangedConnection;

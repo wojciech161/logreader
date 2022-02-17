@@ -1,4 +1,5 @@
 #include "MarkDialog.hpp"
+#include "MainWindow.hpp"
 
 namespace view
 {

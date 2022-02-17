@@ -1,6 +1,5 @@
 #pragma once
 
-#include <string>
 #include <gtkmm/filechooserdialog.h>
 
 namespace view
