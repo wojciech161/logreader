@@ -6,7 +6,7 @@ namespace view
 {
 MainWindow::MainWindow(
     const controllers::BookmarkController& bookmarkController,
-    const controllers::TabController& tabController)
+    controllers::TabController& tabController)
 : topContainer(Gtk::ORIENTATION_VERTICAL)
 , mainContainer(Gtk::ORIENTATION_HORIZONTAL)
 , bookmarkView{bookmarkController}

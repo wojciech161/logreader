@@ -1,5 +1,8 @@
 #pragma once
 
+#include <map>
+#include <string>
+
 namespace view
 {
 class LogContainer;
@@ -19,13 +22,18 @@ public:
     TabController(view::MainWindow&, model::LogList&);
     ~TabController();
 
-    void openSingleFile() const;
-    void removeLog(int) const;
+    void openSingleFile();
+    void removeLog(int);
+
+private:
+    bool isFileOpened(const std::string&) const;
+    void cleanupParent(int);
 
 private:
     view::MainWindow& appWindow;
     view::LogContainer& logTabs;
     model::LogList& openedLogs;
     const model::Bookmark& columns;
+    std::map<int, std::string> openedFiles;
 };
 } // namespace controllers

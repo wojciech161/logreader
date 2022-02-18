@@ -43,6 +43,11 @@ void FunctionsController::performGrep() const try
         functions::Grep operation{currentLog, result.query, result.regexp, result.caseSensitive, result.inverted};
         auto newLog{std::make_unique<model::Log>(functions::createName(
             result.query, result.regexp, result.caseSensitive, result.inverted), columns, currentLog.getId())};
+        if (isGrepPresent(currentLog, newLog->getName()))
+        {
+            std::cout << "Grep is already present\n";
+            return;
+        }
         if (operation.run(*newLog))
         {
             int newLogId{newLog->getId()};
@@ -122,5 +127,21 @@ model::Log& FunctionsController::getCurrentLog() const
         throw std::runtime_error("Can't get current log!");
     }
     return openedLogs.get(currentLogId);
+}
+
+bool FunctionsController::isGrepPresent(const model::Log& parentLog, const std::string& grepName) const
+{
+    const auto& currentGreps{parentLog.getChildren()};
+    return std::find_if(currentGreps.begin(), currentGreps.end(), [this, grepName](int logId) {
+        try
+        {
+            return openedLogs.get(logId).getName() == grepName;
+        }
+        catch(const std::exception&)
+        {
+            return false;
+        }
+        
+    }) != currentGreps.end();
 }
 } // namespace controllers

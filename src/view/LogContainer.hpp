@@ -23,8 +23,8 @@ namespace view
 class LogContainer : public Gtk::Notebook
 {
 public:
-    LogContainer(const controllers::BookmarkController&, const controllers::TabController&);
-    LogContainer(const model::Log&, const controllers::BookmarkController&, const controllers::TabController&);
+    LogContainer(const controllers::BookmarkController&, controllers::TabController&);
+    LogContainer(const model::Log&, const controllers::BookmarkController&, controllers::TabController&);
     virtual ~LogContainer();
 
     LogContainer& getCurrentTab();
@@ -39,7 +39,7 @@ private:
 private:
     LogView baseLog;
     const controllers::BookmarkController& bookmarkController;
-    const controllers::TabController& tabController;
+    controllers::TabController& tabController;
     std::map<std::string, std::unique_ptr<TabLabel>> grepLabels;
     std::map<std::string, std::unique_ptr<LogContainer>> grepTabs;
     sigc::connection pageChangedConnection;

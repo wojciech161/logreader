@@ -75,4 +75,9 @@ int Log::getParentId() const
 {
     return parentId;
 }
+
+const std::vector<int>& Log::getChildren() const
+{
+    return children;
+}
 } // namespace model

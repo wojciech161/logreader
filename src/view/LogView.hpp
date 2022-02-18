@@ -17,8 +17,8 @@ namespace view
 class LogView : public Gtk::ScrolledWindow
 {
 public:
-    LogView(const controllers::TabController&);
-    LogView(const model::Log&, const controllers::TabController&);
+    LogView(controllers::TabController&);
+    LogView(const model::Log&, controllers::TabController&);
     virtual ~LogView();
 
     void scrollTo(Gtk::TextIter&);
@@ -27,6 +27,6 @@ public:
 private:
     Gsv::View textView;
     int modelId;
-    const controllers::TabController& tabController;
+    controllers::TabController& tabController;
 };
 } // namespace view

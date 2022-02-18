@@ -30,6 +30,7 @@ public:
 private:
     std::string getSelection(bool souldUnmark = true) const;
     model::Log& getCurrentLog() const;
+    bool isGrepPresent(const model::Log&, const std::string&) const;
 
 private:
     view::MainWindow& appWindow;

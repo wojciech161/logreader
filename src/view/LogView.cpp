@@ -6,7 +6,7 @@
 
 namespace view
 {
-LogView::LogView(const controllers::TabController& tabController)
+LogView::LogView(controllers::TabController& tabController)
 : modelId{-1}
 , tabController{tabController}
 {
@@ -14,7 +14,7 @@ LogView::LogView(const controllers::TabController& tabController)
     set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 }
 
-LogView::LogView(const model::Log& log, const controllers::TabController& tabController)
+LogView::LogView(const model::Log& log, controllers::TabController& tabController)
 : modelId{log.getId()}
 , tabController{tabController}
 {

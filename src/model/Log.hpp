@@ -26,6 +26,7 @@ public:
     void addChild(int);
     void removeChild(int);
     int getParentId() const;
+    const std::vector<int>& getChildren() const;
 
 private:
     int id;

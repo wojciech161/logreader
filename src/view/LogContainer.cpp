@@ -9,7 +9,7 @@ namespace view
 {
 LogContainer::LogContainer(
     const controllers::BookmarkController& bookmarkController,
-    const controllers::TabController& tabController)
+    controllers::TabController& tabController)
 : baseLog{tabController}
 , bookmarkController{bookmarkController}
 , tabController{tabController}
@@ -25,7 +25,7 @@ LogContainer::LogContainer(
 LogContainer::LogContainer(
     const model::Log& log,
     const controllers::BookmarkController& bookmarkController,
-    const controllers::TabController& tabController)
+    controllers::TabController& tabController)
 : baseLog{log, tabController}
 , bookmarkController{bookmarkController}
 , tabController{tabController}

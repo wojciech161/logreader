@@ -25,7 +25,7 @@ make
 - [x] refactor (separate layers)
 - [x] model: Log, LogList, Bookmark, BookmarkList, model as logId, fileId, ids in view(?)
 - [x] controller: new folder, all logic moved there
-- [ ] Add check in model/controller if the same file is not opened/if the same grep is not present
+- [x] Add check in controller if the same file is not opened/if the same grep is not present
 - [ ] cmake refactor (introduce libs)
 - [ ] add icon (https://stackoverflow.com/questions/63697778/how-to-use-glib-compile-resources-with-cmake, Gio::Resources (gtkmm tutorial))
 

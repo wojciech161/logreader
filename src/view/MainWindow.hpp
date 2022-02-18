@@ -18,7 +18,7 @@ namespace view
 class MainWindow : public Gtk::Window
 {
 public:
-    MainWindow(const controllers::BookmarkController&, const controllers::TabController&);
+    MainWindow(const controllers::BookmarkController&, controllers::TabController&);
     virtual ~MainWindow();
 
     BookmarkView& getBookmarkView();
